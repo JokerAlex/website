@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.SchoolIntroductionMapper" >
+  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.SchoolIntroduction" >
+    <constructor >
+      <idArg column="school_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="school_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="school_update_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="school_content" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="school_acess_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    school_id, school_title, school_update_time, school_content, school_acess_number, 
+    Admin_admin_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from School_introduction
+    where school_id = #{schoolId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from School_introduction
+    where school_id = #{schoolId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dzkd.website.pojo.SchoolIntroduction" >
+    insert into School_introduction (school_id, school_title, school_update_time, 
+      school_content, school_acess_number, Admin_admin_id
+      )
+    values (#{schoolId,jdbcType=INTEGER}, #{schoolTitle,jdbcType=VARCHAR}, #{schoolUpdateTime,jdbcType=VARCHAR}, 
+      #{schoolContent,jdbcType=VARCHAR}, #{schoolAcessNumber,jdbcType=INTEGER}, #{adminAdminId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.SchoolIntroduction" >
+    insert into School_introduction
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="schoolId != null" >
+        school_id,
+      </if>
+      <if test="schoolTitle != null" >
+        school_title,
+      </if>
+      <if test="schoolUpdateTime != null" >
+        school_update_time,
+      </if>
+      <if test="schoolContent != null" >
+        school_content,
+      </if>
+      <if test="schoolAcessNumber != null" >
+        school_acess_number,
+      </if>
+      <if test="adminAdminId != null" >
+        Admin_admin_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="schoolId != null" >
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolTitle != null" >
+        #{schoolTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolUpdateTime != null" >
+        #{schoolUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolContent != null" >
+        #{schoolContent,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolAcessNumber != null" >
+        #{schoolAcessNumber,jdbcType=INTEGER},
+      </if>
+      <if test="adminAdminId != null" >
+        #{adminAdminId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.SchoolIntroduction" >
+    update School_introduction
+    <set >
+      <if test="schoolTitle != null" >
+        school_title = #{schoolTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolUpdateTime != null" >
+        school_update_time = #{schoolUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolContent != null" >
+        school_content = #{schoolContent,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolAcessNumber != null" >
+        school_acess_number = #{schoolAcessNumber,jdbcType=INTEGER},
+      </if>
+      <if test="adminAdminId != null" >
+        Admin_admin_id = #{adminAdminId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where school_id = #{schoolId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.SchoolIntroduction" >
+    update School_introduction
+    set school_title = #{schoolTitle,jdbcType=VARCHAR},
+      school_update_time = #{schoolUpdateTime,jdbcType=VARCHAR},
+      school_content = #{schoolContent,jdbcType=VARCHAR},
+      school_acess_number = #{schoolAcessNumber,jdbcType=INTEGER},
+      Admin_admin_id = #{adminAdminId,jdbcType=INTEGER}
+    where school_id = #{schoolId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.ProfessionalIntroductionMapper" >
+  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.ProfessionalIntroduction" >
+    <constructor >
+      <idArg column="professional_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="professional_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="professional_update_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="professional_content" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="professional_acess_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="Department_introduction_department_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    professional_id, professional_title, professional_update_time, professional_content, 
+    professional_acess_number, Admin_admin_id, Department_introduction_department_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Professional_introduction
+    where professional_id = #{professionalId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Professional_introduction
+    where professional_id = #{professionalId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dzkd.website.pojo.ProfessionalIntroduction" >
+    insert into Professional_introduction (professional_id, professional_title, 
+      professional_update_time, professional_content, 
+      professional_acess_number, Admin_admin_id, 
+      Department_introduction_department_id)
+    values (#{professionalId,jdbcType=INTEGER}, #{professionalTitle,jdbcType=VARCHAR}, 
+      #{professionalUpdateTime,jdbcType=VARCHAR}, #{professionalContent,jdbcType=VARCHAR}, 
+      #{professionalAcessNumber,jdbcType=INTEGER}, #{adminAdminId,jdbcType=INTEGER}, 
+      #{departmentIntroductionDepartmentId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.ProfessionalIntroduction" >
+    insert into Professional_introduction
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="professionalId != null" >
+        professional_id,
+      </if>
+      <if test="professionalTitle != null" >
+        professional_title,
+      </if>
+      <if test="professionalUpdateTime != null" >
+        professional_update_time,
+      </if>
+      <if test="professionalContent != null" >
+        professional_content,
+      </if>
+      <if test="professionalAcessNumber != null" >
+        professional_acess_number,
+      </if>
+      <if test="adminAdminId != null" >
+        Admin_admin_id,
+      </if>
+      <if test="departmentIntroductionDepartmentId != null" >
+        Department_introduction_department_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="professionalId != null" >
+        #{professionalId,jdbcType=INTEGER},
+      </if>
+      <if test="professionalTitle != null" >
+        #{professionalTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="professionalUpdateTime != null" >
+        #{professionalUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="professionalContent != null" >
+        #{professionalContent,jdbcType=VARCHAR},
+      </if>
+      <if test="professionalAcessNumber != null" >
+        #{professionalAcessNumber,jdbcType=INTEGER},
+      </if>
+      <if test="adminAdminId != null" >
+        #{adminAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentIntroductionDepartmentId != null" >
+        #{departmentIntroductionDepartmentId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.ProfessionalIntroduction" >
+    update Professional_introduction
+    <set >
+      <if test="professionalTitle != null" >
+        professional_title = #{professionalTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="professionalUpdateTime != null" >
+        professional_update_time = #{professionalUpdateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="professionalContent != null" >
+        professional_content = #{professionalContent,jdbcType=VARCHAR},
+      </if>
+      <if test="professionalAcessNumber != null" >
+        professional_acess_number = #{professionalAcessNumber,jdbcType=INTEGER},
+      </if>
+      <if test="adminAdminId != null" >
+        Admin_admin_id = #{adminAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentIntroductionDepartmentId != null" >
+        Department_introduction_department_id = #{departmentIntroductionDepartmentId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where professional_id = #{professionalId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.ProfessionalIntroduction" >
+    update Professional_introduction
+    set professional_title = #{professionalTitle,jdbcType=VARCHAR},
+      professional_update_time = #{professionalUpdateTime,jdbcType=VARCHAR},
+      professional_content = #{professionalContent,jdbcType=VARCHAR},
+      professional_acess_number = #{professionalAcessNumber,jdbcType=INTEGER},
+      Admin_admin_id = #{adminAdminId,jdbcType=INTEGER},
+      Department_introduction_department_id = #{departmentIntroductionDepartmentId,jdbcType=INTEGER}
+    where professional_id = #{professionalId,jdbcType=INTEGER}
+  </update>
+</mapper>

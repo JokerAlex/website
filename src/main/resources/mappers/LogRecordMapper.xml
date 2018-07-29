@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.LogRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.LogRecord" >
+    <constructor >
+      <idArg column="log_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="log_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="operation_ip" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="log_content" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    log_id, log_time, operation_ip, log_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Log_record
+    where log_id = #{logId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Log_record
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dzkd.website.pojo.LogRecord" >
+    insert into Log_record (log_id, log_time, operation_ip, 
+      log_content)
+    values (#{logId,jdbcType=INTEGER}, #{logTime,jdbcType=VARCHAR}, #{operationIp,jdbcType=VARCHAR}, 
+      #{logContent,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.LogRecord" >
+    insert into Log_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        log_id,
+      </if>
+      <if test="logTime != null" >
+        log_time,
+      </if>
+      <if test="operationIp != null" >
+        operation_ip,
+      </if>
+      <if test="logContent != null" >
+        log_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logId != null" >
+        #{logId,jdbcType=INTEGER},
+      </if>
+      <if test="logTime != null" >
+        #{logTime,jdbcType=VARCHAR},
+      </if>
+      <if test="operationIp != null" >
+        #{operationIp,jdbcType=VARCHAR},
+      </if>
+      <if test="logContent != null" >
+        #{logContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.LogRecord" >
+    update Log_record
+    <set >
+      <if test="logTime != null" >
+        log_time = #{logTime,jdbcType=VARCHAR},
+      </if>
+      <if test="operationIp != null" >
+        operation_ip = #{operationIp,jdbcType=VARCHAR},
+      </if>
+      <if test="logContent != null" >
+        log_content = #{logContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.LogRecord" >
+    update Log_record
+    set log_time = #{logTime,jdbcType=VARCHAR},
+      operation_ip = #{operationIp,jdbcType=VARCHAR},
+      log_content = #{logContent,jdbcType=VARCHAR}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+</mapper>

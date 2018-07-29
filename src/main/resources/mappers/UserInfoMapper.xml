@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.UserInfoMapper">
+    <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.UserInfo">
+        <constructor>
+            <idArg column="user_info_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="real_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="telephone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="user_password" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="reg_time" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+        user_info_id, real_name, address, telephone, email, user_name, user_password, reg_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from User_info
+        where user_info_id = #{userInfoId,jdbcType=INTEGER}
+    </select>
+    <!--用户名密码登录-->
+    <select id="selectByUserName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from User_info
+        where user_name = #{userName} and user_password = #{userPassword}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from User_info
+        where user_info_id = #{userInfoId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.dzkd.website.pojo.UserInfo">
+        insert into User_info (user_info_id, real_name, address,
+                               telephone, email, user_name,
+                               user_password, reg_time)
+        values (#{userInfoId,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+                #{telephone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+                #{userPassword,jdbcType=VARCHAR}, #{regTime,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.dzkd.website.pojo.UserInfo">
+        insert into User_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userInfoId != null">
+                user_info_id,
+            </if>
+            <if test="realName != null">
+                real_name,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="userPassword != null">
+                user_password,
+            </if>
+            <if test="regTime != null">
+                reg_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userInfoId != null">
+                #{userInfoId,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null">
+                #{userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="regTime != null">
+                #{regTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.UserInfo">
+        update User_info
+        <set>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null">
+                user_password = #{userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="regTime != null">
+                reg_time = #{regTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where user_info_id = #{userInfoId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.UserInfo">
+        update User_info
+        set real_name     = #{realName,jdbcType=VARCHAR},
+            address       = #{address,jdbcType=VARCHAR},
+            telephone     = #{telephone,jdbcType=VARCHAR},
+            email         = #{email,jdbcType=VARCHAR},
+            user_name     = #{userName,jdbcType=VARCHAR},
+            user_password = #{userPassword,jdbcType=VARCHAR},
+            reg_time      = #{regTime,jdbcType=VARCHAR}
+        where user_info_id = #{userInfoId,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.EmployInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.EmployInfo" >
+    <constructor >
+      <idArg column="emp_info_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="emp_info_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="emp_info_content" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="emp_info_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="emp_acess_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    emp_info_id, emp_info_title, emp_info_content, emp_info_time, emp_acess_number, Admin_admin_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Employ_info
+    where emp_info_id = #{empInfoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Employ_info
+    where emp_info_id = #{empInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dzkd.website.pojo.EmployInfo" >
+    insert into Employ_info (emp_info_id, emp_info_title, emp_info_content, 
+      emp_info_time, emp_acess_number, Admin_admin_id
+      )
+    values (#{empInfoId,jdbcType=INTEGER}, #{empInfoTitle,jdbcType=VARCHAR}, #{empInfoContent,jdbcType=VARCHAR}, 
+      #{empInfoTime,jdbcType=VARCHAR}, #{empAcessNumber,jdbcType=INTEGER}, #{adminAdminId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.EmployInfo" >
+    insert into Employ_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="empInfoId != null" >
+        emp_info_id,
+      </if>
+      <if test="empInfoTitle != null" >
+        emp_info_title,
+      </if>
+      <if test="empInfoContent != null" >
+        emp_info_content,
+      </if>
+      <if test="empInfoTime != null" >
+        emp_info_time,
+      </if>
+      <if test="empAcessNumber != null" >
+        emp_acess_number,
+      </if>
+      <if test="adminAdminId != null" >
+        Admin_admin_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="empInfoId != null" >
+        #{empInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="empInfoTitle != null" >
+        #{empInfoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="empInfoContent != null" >
+        #{empInfoContent,jdbcType=VARCHAR},
+      </if>
+      <if test="empInfoTime != null" >
+        #{empInfoTime,jdbcType=VARCHAR},
+      </if>
+      <if test="empAcessNumber != null" >
+        #{empAcessNumber,jdbcType=INTEGER},
+      </if>
+      <if test="adminAdminId != null" >
+        #{adminAdminId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.EmployInfo" >
+    update Employ_info
+    <set >
+      <if test="empInfoTitle != null" >
+        emp_info_title = #{empInfoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="empInfoContent != null" >
+        emp_info_content = #{empInfoContent,jdbcType=VARCHAR},
+      </if>
+      <if test="empInfoTime != null" >
+        emp_info_time = #{empInfoTime,jdbcType=VARCHAR},
+      </if>
+      <if test="empAcessNumber != null" >
+        emp_acess_number = #{empAcessNumber,jdbcType=INTEGER},
+      </if>
+      <if test="adminAdminId != null" >
+        Admin_admin_id = #{adminAdminId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where emp_info_id = #{empInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.EmployInfo" >
+    update Employ_info
+    set emp_info_title = #{empInfoTitle,jdbcType=VARCHAR},
+      emp_info_content = #{empInfoContent,jdbcType=VARCHAR},
+      emp_info_time = #{empInfoTime,jdbcType=VARCHAR},
+      emp_acess_number = #{empAcessNumber,jdbcType=INTEGER},
+      Admin_admin_id = #{adminAdminId,jdbcType=INTEGER}
+    where emp_info_id = #{empInfoId,jdbcType=INTEGER}
+  </update>
+</mapper>

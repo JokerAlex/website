@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.StudentMapper">
+    <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.Student">
+        <constructor>
+            <idArg column="stu_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="stu_college" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="stu_major" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="stu_grade" jdbcType="CHAR" javaType="java.lang.String"/>
+            <arg column="User_user_info_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="userInfoResultMap" type="com.dzkd.website.pojo.UserInfo">
+        <constructor>
+            <idArg column="user_info_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="real_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="telephone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="user_password" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="reg_time" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="allResultMap" type="com.dzkd.website.pojo.Student">
+        <constructor>
+            <idArg column="stu_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="stu_college" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="stu_major" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="stu_grade" jdbcType="CHAR" javaType="java.lang.String"/>
+            <arg column="User_user_info_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+        <collection property="userInfo" resultMap="userInfoResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        stu_id, stu_college, stu_major, stu_grade, User_user_info_id
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from Student
+        where stu_id = #{stuId,jdbcType=VARCHAR}
+    </select>
+
+    <!---->
+    <select id="selectByForeignKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from Student
+        where User_user_info_id = #{userId}
+    </select>
+    <!--联合用户信息表查询-->
+    <select id="selectAll" resultMap="allResultMap">
+        select
+            s.stu_id,
+            s.stu_college,
+            s.stu_major,
+            s.stu_grade,
+            s.User_user_info_id,
+            u.user_info_id,
+            u.real_name,
+            u.address,
+            u.telephone,
+            u.email,
+            u.user_name,
+            u.user_password,
+            u.reg_time
+        from Student s, User_info u
+        where User_user_info_id = user_info_id;
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from Student
+        where stu_id = #{stuId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.dzkd.website.pojo.Student">
+        insert into Student (stu_id, stu_college, stu_major,
+                             stu_grade, User_user_info_id)
+        values (#{stuId,jdbcType=VARCHAR}, #{stuCollege,jdbcType=VARCHAR}, #{stuMajor,jdbcType=VARCHAR},
+                #{stuGrade,jdbcType=CHAR}, #{userUserInfoId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.dzkd.website.pojo.Student">
+        insert into Student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">
+                stu_id,
+            </if>
+            <if test="stuCollege != null">
+                stu_college,
+            </if>
+            <if test="stuMajor != null">
+                stu_major,
+            </if>
+            <if test="stuGrade != null">
+                stu_grade,
+            </if>
+            <if test="userUserInfoId != null">
+                User_user_info_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">
+                #{stuId,jdbcType=VARCHAR},
+            </if>
+            <if test="stuCollege != null">
+                #{stuCollege,jdbcType=VARCHAR},
+            </if>
+            <if test="stuMajor != null">
+                #{stuMajor,jdbcType=VARCHAR},
+            </if>
+            <if test="stuGrade != null">
+                #{stuGrade,jdbcType=CHAR},
+            </if>
+            <if test="userUserInfoId != null">
+                #{userUserInfoId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.Student">
+        update Student
+        <set>
+            <if test="stuCollege != null">
+                stu_college = #{stuCollege,jdbcType=VARCHAR},
+            </if>
+            <if test="stuMajor != null">
+                stu_major = #{stuMajor,jdbcType=VARCHAR},
+            </if>
+            <if test="stuGrade != null">
+                stu_grade = #{stuGrade,jdbcType=CHAR},
+            </if>
+            <if test="userUserInfoId != null">
+                User_user_info_id = #{userUserInfoId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where stu_id = #{stuId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.Student">
+        update Student
+        set stu_college       = #{stuCollege,jdbcType=VARCHAR},
+            stu_major         = #{stuMajor,jdbcType=VARCHAR},
+            stu_grade         = #{stuGrade,jdbcType=CHAR},
+            User_user_info_id = #{userUserInfoId,jdbcType=INTEGER}
+        where stu_id = #{stuId,jdbcType=VARCHAR}
+    </update>
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.CommentsMapper" >
+  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.Comments" >
+    <constructor >
+      <idArg column="comment_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="comment_content" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="comment_up_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="comment_del_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="Student_stu_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="Post_post_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    comment_id, comment_content, comment_up_time, comment_del_time, Student_stu_id, Post_post_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Comments
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Comments
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dzkd.website.pojo.Comments" >
+    insert into Comments (comment_id, comment_content, comment_up_time, 
+      comment_del_time, Student_stu_id, Post_post_id
+      )
+    values (#{commentId,jdbcType=INTEGER}, #{commentContent,jdbcType=VARCHAR}, #{commentUpTime,jdbcType=VARCHAR}, 
+      #{commentDelTime,jdbcType=VARCHAR}, #{studentStuId,jdbcType=VARCHAR}, #{postPostId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.Comments" >
+    insert into Comments
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        comment_id,
+      </if>
+      <if test="commentContent != null" >
+        comment_content,
+      </if>
+      <if test="commentUpTime != null" >
+        comment_up_time,
+      </if>
+      <if test="commentDelTime != null" >
+        comment_del_time,
+      </if>
+      <if test="studentStuId != null" >
+        Student_stu_id,
+      </if>
+      <if test="postPostId != null" >
+        Post_post_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null" >
+        #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="commentUpTime != null" >
+        #{commentUpTime,jdbcType=VARCHAR},
+      </if>
+      <if test="commentDelTime != null" >
+        #{commentDelTime,jdbcType=VARCHAR},
+      </if>
+      <if test="studentStuId != null" >
+        #{studentStuId,jdbcType=VARCHAR},
+      </if>
+      <if test="postPostId != null" >
+        #{postPostId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.Comments" >
+    update Comments
+    <set >
+      <if test="commentContent != null" >
+        comment_content = #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="commentUpTime != null" >
+        comment_up_time = #{commentUpTime,jdbcType=VARCHAR},
+      </if>
+      <if test="commentDelTime != null" >
+        comment_del_time = #{commentDelTime,jdbcType=VARCHAR},
+      </if>
+      <if test="studentStuId != null" >
+        Student_stu_id = #{studentStuId,jdbcType=VARCHAR},
+      </if>
+      <if test="postPostId != null" >
+        Post_post_id = #{postPostId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.Comments" >
+    update Comments
+    set comment_content = #{commentContent,jdbcType=VARCHAR},
+      comment_up_time = #{commentUpTime,jdbcType=VARCHAR},
+      comment_del_time = #{commentDelTime,jdbcType=VARCHAR},
+      Student_stu_id = #{studentStuId,jdbcType=VARCHAR},
+      Post_post_id = #{postPostId,jdbcType=INTEGER}
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+</mapper>

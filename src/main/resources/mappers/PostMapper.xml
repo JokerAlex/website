@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.PostMapper" >
+  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.Post" >
+    <constructor >
+      <idArg column="post_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="post_content" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="post_up_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="post_del_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="Student_stu_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    post_id, post_content, post_up_time, post_del_time, Student_stu_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Post
+    where post_id = #{postId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Post
+    where post_id = #{postId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dzkd.website.pojo.Post" >
+    insert into Post (post_id, post_content, post_up_time, 
+      post_del_time, Student_stu_id)
+    values (#{postId,jdbcType=INTEGER}, #{postContent,jdbcType=VARCHAR}, #{postUpTime,jdbcType=VARCHAR}, 
+      #{postDelTime,jdbcType=VARCHAR}, #{studentStuId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.Post" >
+    insert into Post
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        post_id,
+      </if>
+      <if test="postContent != null" >
+        post_content,
+      </if>
+      <if test="postUpTime != null" >
+        post_up_time,
+      </if>
+      <if test="postDelTime != null" >
+        post_del_time,
+      </if>
+      <if test="studentStuId != null" >
+        Student_stu_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="postContent != null" >
+        #{postContent,jdbcType=VARCHAR},
+      </if>
+      <if test="postUpTime != null" >
+        #{postUpTime,jdbcType=VARCHAR},
+      </if>
+      <if test="postDelTime != null" >
+        #{postDelTime,jdbcType=VARCHAR},
+      </if>
+      <if test="studentStuId != null" >
+        #{studentStuId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.Post" >
+    update Post
+    <set >
+      <if test="postContent != null" >
+        post_content = #{postContent,jdbcType=VARCHAR},
+      </if>
+      <if test="postUpTime != null" >
+        post_up_time = #{postUpTime,jdbcType=VARCHAR},
+      </if>
+      <if test="postDelTime != null" >
+        post_del_time = #{postDelTime,jdbcType=VARCHAR},
+      </if>
+      <if test="studentStuId != null" >
+        Student_stu_id = #{studentStuId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where post_id = #{postId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.Post" >
+    update Post
+    set post_content = #{postContent,jdbcType=VARCHAR},
+      post_up_time = #{postUpTime,jdbcType=VARCHAR},
+      post_del_time = #{postDelTime,jdbcType=VARCHAR},
+      Student_stu_id = #{studentStuId,jdbcType=VARCHAR}
+    where post_id = #{postId,jdbcType=INTEGER}
+  </update>
+</mapper>

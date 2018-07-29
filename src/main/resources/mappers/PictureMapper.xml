@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dzkd.website.dao.PictureMapper" >
+  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.Picture" >
+    <constructor >
+      <idArg column="picture_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="picture_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="picture_category" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="acess_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    picture_id, picture_name, picture_category, acess_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Picture
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Picture
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dzkd.website.pojo.Picture" >
+    insert into Picture (picture_id, picture_name, picture_category, 
+      acess_id)
+    values (#{pictureId,jdbcType=INTEGER}, #{pictureName,jdbcType=VARCHAR}, #{pictureCategory,jdbcType=VARCHAR}, 
+      #{acessId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.Picture" >
+    insert into Picture
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pictureId != null" >
+        picture_id,
+      </if>
+      <if test="pictureName != null" >
+        picture_name,
+      </if>
+      <if test="pictureCategory != null" >
+        picture_category,
+      </if>
+      <if test="acessId != null" >
+        acess_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pictureId != null" >
+        #{pictureId,jdbcType=INTEGER},
+      </if>
+      <if test="pictureName != null" >
+        #{pictureName,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureCategory != null" >
+        #{pictureCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="acessId != null" >
+        #{acessId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.Picture" >
+    update Picture
+    <set >
+      <if test="pictureName != null" >
+        picture_name = #{pictureName,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureCategory != null" >
+        picture_category = #{pictureCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="acessId != null" >
+        acess_id = #{acessId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.Picture" >
+    update Picture
+    set picture_name = #{pictureName,jdbcType=VARCHAR},
+      picture_category = #{pictureCategory,jdbcType=VARCHAR},
+      acess_id = #{acessId,jdbcType=INTEGER}
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </update>
+</mapper>
