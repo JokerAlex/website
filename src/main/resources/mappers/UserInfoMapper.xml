@@ -22,12 +22,19 @@
         from User_info
         where user_info_id = #{userInfoId,jdbcType=INTEGER}
     </select>
+    <!--用户名-->
+    <select id="selectUserName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from User_info
+        where user_name = #{userName}
+    </select>
     <!--用户名密码登录-->
     <select id="selectByUserName" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from User_info
-        where user_name = #{userName} and user_password = #{userPassword}
+        where user_name = #{userName} and user_password = #{password}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from User_info
@@ -41,7 +48,7 @@
                 #{telephone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
                 #{userPassword,jdbcType=VARCHAR}, #{regTime,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.dzkd.website.pojo.UserInfo">
+    <insert id="insertSelective" parameterType="com.dzkd.website.pojo.UserInfo" useGeneratedKeys="true" keyProperty="userInfoId">
         insert into User_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userInfoId != null">

@@ -14,7 +14,9 @@ public interface UserInfoMapper {
 
     UserInfo selectByPrimaryKey(Integer userInfoId);
 
-    UserInfo selectByUserName(@Param("userName") String userName,@Param("userPassword") String userPassword);
+    UserInfo selectUserName(@Param("userName") String userName);
+
+    UserInfo selectByUserName(@Param("userName") String userName, @Param("password") String password);
 
     int updateByPrimaryKeySelective(UserInfo record);
 
