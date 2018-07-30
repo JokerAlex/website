@@ -61,7 +61,7 @@
                u.reg_time
         from Admin_info a,
              User_info u
-        where a.User_user_info_id = u.user_info_id;
+        where a.User_user_info_id = u.user_info_id
     </select>
 
     <!--结合userInfo-->
@@ -78,7 +78,7 @@
                u.reg_time
         from Admin_info a,
              User_info u
-        where a.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password};
+        where a.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

@@ -67,7 +67,7 @@
             u.user_name,
             u.reg_time
         from Student s, User_info u
-        where User_user_info_id = user_info_id;
+        where User_user_info_id = user_info_id
     </select>
 
     <!--结合userInfo表，用户名、密码-->
@@ -86,7 +86,7 @@
                u.user_name,
                u.reg_time
         from Student s, User_info u
-        where s.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password};
+        where s.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from Student
