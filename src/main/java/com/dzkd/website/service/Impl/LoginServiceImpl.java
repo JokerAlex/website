@@ -20,6 +20,7 @@ public class LoginServiceImpl implements LoginService {
     private UserInfoMapper userInfoMapper;
     private AdminInfoMapper adminInfoMapper;
     private StudentMapper studentMapper;
+
     @Autowired
     public LoginServiceImpl(UserInfoMapper userInfoMapper, AdminInfoMapper adminInfoMapper, StudentMapper studentMapper) {
         this.userInfoMapper = userInfoMapper;
@@ -35,29 +36,34 @@ public class LoginServiceImpl implements LoginService {
         JSONObject data = new JSONObject();
 
         UserInfo userInfo = userInfoMapper.selectByUserName(userName, password);
-        if (userInfo == null){
+        Student studentInfo = studentMapper.selectByStuId(userName, password);
+        if (userInfo == null && studentInfo == null) {
             resultCode = 0;
             msg = "用户名或密码错误";
         } else {
             resultCode = 1;
-            Student student = studentMapper.selectByUserName(userName, password);
+            Student student = studentMapper.selectByUserName(userName, password) == null ? studentMapper.selectByStuId(userName, password) : null;
             AdminInfo adminInfo = adminInfoMapper.selectByUserName(userName, password);
 
-            if (adminInfo == null){
-                data.put("isAdmin",0);
+            if (adminInfo == null) {
+                data.put("isAdmin", 0);
                 data.put("stu", student);
-            } else if (student == null){
-                data.put("isAdmin",1);
+            } else if (student == null) {
+                data.put("isAdmin", 1);
                 data.put("admin", adminInfo);
             } else {
-                data.put("isAdmin",1);
+                data.put("isAdmin", 1);
                 data.put("stu", student);
                 data.put("admin", adminInfo);
             }
             msg = "登录成功";
 
             UserInfo userLoginTime = new UserInfo();
-            userLoginTime.setUserInfoId(userInfo.getUserInfoId());
+            if (studentInfo != null){
+                userLoginTime.setUserInfoId(studentInfo.getUserUserInfoId());
+            } else {
+                userLoginTime.setUserInfoId(userInfo.getUserInfoId());
+            }
             userLoginTime.setRegTime(new Date().toString());
             userInfoMapper.updateByPrimaryKeySelective(userLoginTime);
         }

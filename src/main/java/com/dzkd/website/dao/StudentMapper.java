@@ -21,6 +21,8 @@ public interface StudentMapper {
 
     Student selectByUserName(@Param("userName") String userName, @Param("password") String password);
 
+    Student selectByStuId(@Param("stuId") String stuId, @Param("password") String password);
+
     List<Student> selectAll();
 
     int updateByPrimaryKeySelective(Student record);

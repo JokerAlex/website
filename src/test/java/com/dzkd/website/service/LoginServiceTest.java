@@ -20,7 +20,7 @@ public class LoginServiceTest {
 
     @Test
     public void test() {
-        JSONObject adminAndStudent = loginService.login("test", "111");
+        JSONObject adminAndStudent = loginService.login("2016220401014", "111");
         System.out.println("Admin And Student\n" + adminAndStudent.toString());
 
         JSONObject admin = loginService.login("test2", "222");
