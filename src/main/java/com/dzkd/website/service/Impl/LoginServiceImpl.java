@@ -42,7 +42,9 @@ public class LoginServiceImpl implements LoginService {
             msg = "用户名或密码错误";
         } else {
             resultCode = 1;
-            Student student = studentMapper.selectByUserName(userName, password) == null ? studentMapper.selectByStuId(userName, password) : null;
+            Student student = studentMapper.selectByUserName(userName, password) == null ?
+                    studentMapper.selectByStuId(userName, password) :
+                    studentMapper.selectByUserName(userName, password);
             AdminInfo adminInfo = adminInfoMapper.selectByUserName(userName, password);
 
             if (adminInfo == null) {
