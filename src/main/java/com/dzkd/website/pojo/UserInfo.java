@@ -28,6 +28,16 @@ public class UserInfo {
         this.regTime = regTime;
     }
 
+    public UserInfo(Integer userInfoId, String realName, String address, String telephone, String email, String userName, String regTime) {
+        this.userInfoId = userInfoId;
+        this.realName = realName;
+        this.address = address;
+        this.telephone = telephone;
+        this.email = email;
+        this.userName = userName;
+        this.regTime = regTime;
+    }
+
     public UserInfo() {
         super();
     }

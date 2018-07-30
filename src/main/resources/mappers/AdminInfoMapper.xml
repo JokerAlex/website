@@ -1,80 +1,136 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dzkd.website.dao.AdminInfoMapper" >
-  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.AdminInfo" >
-    <constructor >
-      <idArg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="admin_block_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="User_user_info_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-    </constructor>
-  </resultMap>
-  <sql id="Base_Column_List" >
-    admin_id, admin_block_id, User_user_info_id
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from Admin_info
-    where admin_id = #{adminId,jdbcType=INTEGER}
-  </select>
-  <!---->
-  <select id="selectByForeignKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from Admin_info
-    where User_user_info_id = #{userId}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from Admin_info
-    where admin_id = #{adminId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.dzkd.website.pojo.AdminInfo" >
-    insert into Admin_info (admin_id, admin_block_id, User_user_info_id
-      )
-    values (#{adminId,jdbcType=INTEGER}, #{adminBlockId,jdbcType=INTEGER}, #{userUserInfoId,jdbcType=INTEGER}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.AdminInfo" >
-    insert into Admin_info
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="adminId != null" >
-        admin_id,
-      </if>
-      <if test="adminBlockId != null" >
-        admin_block_id,
-      </if>
-      <if test="userUserInfoId != null" >
-        User_user_info_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="adminId != null" >
-        #{adminId,jdbcType=INTEGER},
-      </if>
-      <if test="adminBlockId != null" >
-        #{adminBlockId,jdbcType=INTEGER},
-      </if>
-      <if test="userUserInfoId != null" >
-        #{userUserInfoId,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.AdminInfo" >
-    update Admin_info
-    <set >
-      <if test="adminBlockId != null" >
-        admin_block_id = #{adminBlockId,jdbcType=INTEGER},
-      </if>
-      <if test="userUserInfoId != null" >
-        User_user_info_id = #{userUserInfoId,jdbcType=INTEGER},
-      </if>
-    </set>
-    where admin_id = #{adminId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.AdminInfo" >
-    update Admin_info
-    set admin_block_id = #{adminBlockId,jdbcType=INTEGER},
-      User_user_info_id = #{userUserInfoId,jdbcType=INTEGER}
-    where admin_id = #{adminId,jdbcType=INTEGER}
-  </update>
+<mapper namespace="com.dzkd.website.dao.AdminInfoMapper">
+    <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.AdminInfo">
+        <constructor>
+            <idArg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="admin_block_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="User_user_info_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="userInfoResultMap" type="com.dzkd.website.pojo.UserInfo">
+        <constructor>
+            <idArg column="user_info_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="real_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="telephone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="reg_time" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="allResultMap" type="com.dzkd.website.pojo.AdminInfo">
+        <constructor>
+            <idArg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="admin_block_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="User_user_info_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+        <collection property="userInfo" resultMap="userInfoResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        admin_id, admin_block_id, User_user_info_id
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from Admin_info
+        where admin_id = #{adminId,jdbcType=INTEGER}
+    </select>
+    <!---->
+    <select id="selectByForeignKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from Admin_info
+        where User_user_info_id = #{userId}
+    </select>
+
+    <!--结合userInfo-->
+    <select id="selectAll" resultMap="allResultMap">
+        select a.admin_id,
+               a.admin_block_id,
+               a.User_user_info_id,
+               u.user_info_id,
+               u.real_name,
+               u.address,
+               u.telephone,
+               u.email,
+               u.user_name,
+               u.reg_time
+        from Admin_info a,
+             User_info u
+        where a.User_user_info_id = u.user_info_id;
+    </select>
+
+    <!--结合userInfo-->
+    <select id="selectByUserName" resultMap="allResultMap">
+        select a.admin_id,
+               a.admin_block_id,
+               a.User_user_info_id,
+               u.user_info_id,
+               u.real_name,
+               u.address,
+               u.telephone,
+               u.email,
+               u.user_name,
+               u.reg_time
+        from Admin_info a,
+             User_info u
+        where a.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password};
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from Admin_info
+        where admin_id = #{adminId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.dzkd.website.pojo.AdminInfo">
+        insert into Admin_info (admin_id, admin_block_id, User_user_info_id)
+        values (#{adminId,jdbcType=INTEGER}, #{adminBlockId,jdbcType=INTEGER}, #{userUserInfoId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.dzkd.website.pojo.AdminInfo">
+        insert into Admin_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="adminId != null">
+                admin_id,
+            </if>
+            <if test="adminBlockId != null">
+                admin_block_id,
+            </if>
+            <if test="userUserInfoId != null">
+                User_user_info_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="adminId != null">
+                #{adminId,jdbcType=INTEGER},
+            </if>
+            <if test="adminBlockId != null">
+                #{adminBlockId,jdbcType=INTEGER},
+            </if>
+            <if test="userUserInfoId != null">
+                #{userUserInfoId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.AdminInfo">
+        update Admin_info
+        <set>
+            <if test="adminBlockId != null">
+                admin_block_id = #{adminBlockId,jdbcType=INTEGER},
+            </if>
+            <if test="userUserInfoId != null">
+                User_user_info_id = #{userUserInfoId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where admin_id = #{adminId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.AdminInfo">
+        update Admin_info
+        set admin_block_id    = #{adminBlockId,jdbcType=INTEGER},
+            User_user_info_id = #{userUserInfoId,jdbcType=INTEGER}
+        where admin_id = #{adminId,jdbcType=INTEGER}
+    </update>
 </mapper>

@@ -1,8 +1,10 @@
 package com.dzkd.website.dao;
 
 import com.dzkd.website.pojo.Student;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Repository
@@ -16,6 +18,8 @@ public interface StudentMapper {
     Student selectByPrimaryKey(String stuId);
 
     Student selectByForeignKey(Integer userId);
+
+    Student selectByUserName(@Param("userName") String userName, @Param("password") String password);
 
     List<Student> selectAll();
 

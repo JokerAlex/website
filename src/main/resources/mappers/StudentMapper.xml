@@ -19,7 +19,6 @@
             <arg column="telephone" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="user_password" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="reg_time" jdbcType="VARCHAR" javaType="java.lang.String"/>
         </constructor>
     </resultMap>
@@ -52,7 +51,7 @@
         from Student
         where User_user_info_id = #{userId}
     </select>
-    <!--联合用户信息表查询-->
+    <!--结合userInfo表-->
     <select id="selectAll" resultMap="allResultMap">
         select
             s.stu_id,
@@ -66,12 +65,29 @@
             u.telephone,
             u.email,
             u.user_name,
-            u.user_password,
             u.reg_time
         from Student s, User_info u
         where User_user_info_id = user_info_id;
     </select>
 
+    <!--结合userInfo表，用户名、密码-->
+    <select id="selectByUserName" resultMap="allResultMap">
+        select
+               s.stu_id,
+               s.stu_college,
+               s.stu_major,
+               s.stu_grade,
+               s.User_user_info_id,
+               u.user_info_id,
+               u.real_name,
+               u.address,
+               u.telephone,
+               u.email,
+               u.user_name,
+               u.reg_time
+        from Student s, User_info u
+        where s.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password};
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete from Student
         where stu_id = #{stuId,jdbcType=VARCHAR}
