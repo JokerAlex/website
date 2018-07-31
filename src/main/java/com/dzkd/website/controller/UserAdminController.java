@@ -23,12 +23,12 @@ public class UserAdminController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/userAdmin/stu/", method = RequestMethod.GET)
-    public List<Student> showStudents(int pageNum, int pageSize) {
+    @RequestMapping(value = "/userAdmin/stu", method = RequestMethod.GET)
+    public JSONObject showStudents(int pageNum, int pageSize) {
         return userService.getAllStudent(pageNum, pageSize);
     }
 
-    @RequestMapping(value = "/userAdmin/stu/", method = RequestMethod.POST)
+    @RequestMapping(value = "/userAdmin/stu", method = RequestMethod.POST)
     public JSONObject addStudent(@RequestBody Student student) {
         return userService.addStudent(student);
     }
@@ -39,22 +39,22 @@ public class UserAdminController {
     }
 
 
-    @RequestMapping(value = "/userAdmin/admin/", method = RequestMethod.GET)
-    public List<AdminInfo> showAdmins(int pageNum, int pageSize) {
+    @RequestMapping(value = "/userAdmin/admin", method = RequestMethod.GET)
+    public JSONObject showAdmins(int pageNum, int pageSize) {
         return userService.getAllAdminInfo(pageNum, pageSize);
     }
 
-    @RequestMapping(value = "/userAdmin/admin/", method = RequestMethod.POST)
+    @RequestMapping(value = "/userAdmin/admin", method = RequestMethod.POST)
     public JSONObject addAdmin(@RequestBody AdminInfo adminInfo) {
         return userService.addAdminInfo(adminInfo);
     }
 
-    @RequestMapping(value = "/userAdmin/admin/", method = RequestMethod.PUT)
+    @RequestMapping(value = "/userAdmin/admin", method = RequestMethod.PUT)
     public JSONObject updateAdmin(@RequestBody AdminInfo adminInfo) {
         return userService.updateAdminInfo(adminInfo);
     }
 
-    @RequestMapping(value = "/userAdmin/admin/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/userAdmin/admin", method = RequestMethod.DELETE)
     public JSONObject delAdmin(@RequestBody AdminInfo adminInfo) {
         return userService.delAdminInfo(adminInfo);
     }

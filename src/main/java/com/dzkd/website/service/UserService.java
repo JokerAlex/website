@@ -5,13 +5,11 @@ import com.dzkd.website.pojo.AdminInfo;
 import com.dzkd.website.pojo.Student;
 import com.dzkd.website.pojo.UserInfo;
 
-import java.util.List;
-
 public interface UserService {
 
-    List<Student> getAllStudent(int pageNum, int pageSize);
+    JSONObject getAllStudent(int pageNum, int pageSize);
 
-    List<AdminInfo> getAllAdminInfo(int pageNum, int pageSize);
+    JSONObject getAllAdminInfo(int pageNum, int pageSize);
 
     int addUserInfo(UserInfo userInfo);
 

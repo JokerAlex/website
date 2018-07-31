@@ -9,6 +9,7 @@ import com.dzkd.website.pojo.Student;
 import com.dzkd.website.pojo.UserInfo;
 import com.dzkd.website.service.UserService;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.LogManager;
@@ -41,9 +42,22 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<Student> getAllStudent(int pageNum, int pageSize) {
+    public JSONObject getAllStudent(int pageNum, int pageSize) {
+        if (pageNum <=0 ) {
+            pageNum = 1;
+        }
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
         PageHelper.startPage(pageNum, pageSize);
-        return studentMapper.selectAll();
+        List<Student> studentList = studentMapper.selectAll();
+        PageInfo<Student> pageInfo = new PageInfo<>(studentList);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data", studentList);
+        jsonObject.put("pageInfo", pageInfo);
+
+        return jsonObject;
     }
 
     /**
@@ -54,9 +68,22 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<AdminInfo> getAllAdminInfo(int pageNum, int pageSize) {
+    public JSONObject getAllAdminInfo(int pageNum, int pageSize) {
+        if (pageNum <=0 ) {
+            pageNum = 1;
+        }
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
         PageHelper.startPage(pageNum, pageSize);
-        return adminInfoMapper.selectAll();
+        List<AdminInfo> adminInfoList = adminInfoMapper.selectAll();
+        PageInfo<AdminInfo> pageInfo = new PageInfo<>(adminInfoList);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data", adminInfoList);
+        jsonObject.put("pageInfo", pageInfo);
+
+        return jsonObject;
     }
 
     /**
