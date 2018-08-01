@@ -1,8 +1,8 @@
 package com.dzkd.website.service;
 
-import com.alibaba.fastjson.JSONObject;
+import com.dzkd.website.pojo.R;
 
 public interface LoginService {
 
-    JSONObject login(String userName, String password);
+    R login(String userName, String password);
 }

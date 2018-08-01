@@ -2,9 +2,9 @@ package com.dzkd.website.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,14 +22,15 @@ public class LoginController {
     }
 
     @RequestMapping("/login")
-    public JSONObject login(String userName, String password, HttpServletRequest request){
-        JSONObject jsonObject = loginService.login(userName, password);
-        if ((int) jsonObject.get("resultCode") == 1) {
-            JSONObject data =(JSONObject) jsonObject.get("data");
+    public R login(String userName, String password, HttpServletRequest request){
+        R r = loginService.login(userName, password);
+
+        if (r.getStatus() == 0) {
+            JSONObject data =(JSONObject) r.getData();
             HttpSession session = request.getSession(true);
             session.setAttribute(session.getId()+"userData",data);
         }
-        return jsonObject;
+        return r;
     }
 
 }

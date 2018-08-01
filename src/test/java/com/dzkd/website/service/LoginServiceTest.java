@@ -2,6 +2,7 @@ package com.dzkd.website.service;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.dzkd.website.pojo.R;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,16 @@ public class LoginServiceTest {
 
     @Test
     public void test() {
-        JSONObject adminAndStudent = loginService.login("2016220401014", "111");
+        R adminAndStudent = loginService.login("2016220401003", "1111");
         System.out.println("Admin And Student\n" + adminAndStudent.toString());
 
-        JSONObject admin = loginService.login("test2", "222");
+        R admin = loginService.login("test2", "222");
         System.out.println("Admin\n" + admin.toString());
 
-        JSONObject student = loginService.login("test3", "333");
+        R student = loginService.login("test3", "333");
         System.out.println("Student\n" + student.toString());
 
-        JSONObject wrongPass = loginService.login("test", "222");
+        R wrongPass = loginService.login("test", "222");
         System.out.println("wrongPass\n" + wrongPass.toString());
     }
 
