@@ -20,9 +20,7 @@ public class UserServiceTest {
 
     @Test
     public void getAllAdminInfo(){
-        JSONObject adminInfo = userService.getAllAdminInfo(2,5);
-
-        System.out.println(adminInfo);
+        System.out.println(userService.getAllAdminInfo(2,5).toString());
     }
 
     @Test
@@ -35,42 +33,38 @@ public class UserServiceTest {
 
     @Test
     public void addAdmin(){
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUserInfoId(19);
-        userInfo.setRealName("addAdmin");
+        UserInfo userInfo = new UserInfo(null,"qqq","hs","0987654321","333@123.com","test5",
+                "111",null);
 
         AdminInfo adminInfo = new AdminInfo();
         adminInfo.setUserInfo(userInfo);
         adminInfo.setAdminBlockId(3);
-        adminInfo.setUserUserInfoId(19);
-
-        JSONObject jsonObject = userService.addAdminInfo(adminInfo);
-        System.out.println(jsonObject.toJSONString());
+        adminInfo.setUserUserInfoId(userInfo.getUserInfoId());
+        System.out.println(userService.addAdminInfo(adminInfo).toString());
 
     }
 
     @Test
     public void updateAdmin(){
         UserInfo userInfo = new UserInfo();
-        userInfo.setUserInfoId(19);
+        userInfo.setUserInfoId(29);
         userInfo.setRealName("addAdmin");
         userInfo.setAddress("cd");
         userInfo.setTelephone("1234567890");
         userInfo.setEmail("111@111.com");
-        userInfo.setUserName("hehehe");
+        userInfo.setUserName("test5");
 
-        AdminInfo adminInfo = new AdminInfo(15,3,19);
+        AdminInfo adminInfo = new AdminInfo(17,3,29);
         adminInfo.setUserInfo(userInfo);
 
-        JSONObject jsonObject = userService.updateAdminInfo(adminInfo);
-        System.out.println(jsonObject.toJSONString());
+        System.out.println(userService.updateAdminInfo(adminInfo).toString());
 
     }
 
     @Test
     public void delAdmin(){
-        AdminInfo adminInfo = new AdminInfo(1,3,1);
-        System.out.println(userService.delAdminInfo(adminInfo).toJSONString());
+        AdminInfo adminInfo = new AdminInfo(20,3,29);
+        System.out.println(userService.delAdminInfo(adminInfo).toString());
     }
 
     @Test
@@ -82,43 +76,44 @@ public class UserServiceTest {
         userInfo.setTelephone("1234567890");
         userInfo.setEmail("111@111.com");
         userInfo.setUserName("haha");
+        userInfo.setUserPassword("222");
 
         Student student = new Student();
-        student.setStuId("2016220401016");
+        student.setStuId("2016220401017");
         student.setStuCollege("xr");
         student.setStuMajor("hlw");
         student.setStuGrade("2016");
         student.setUserInfo(userInfo);
 
-        System.out.println(userService.addStudent(student));
+        System.out.println(userService.addStudent(student).toString());
     }
 
     @Test
     public void updateStudent(){
         UserInfo userInfo = new UserInfo();
-        userInfo.setUserInfoId(21);
+        userInfo.setUserInfoId(30);
         userInfo.setRealName("addAdmin");
         userInfo.setAddress("cd");
         userInfo.setTelephone("0987654321");
         userInfo.setEmail("111@111.com");
-        userInfo.setUserName("test");
+        userInfo.setUserName("testhaha");
 
         Student student = new Student();
-        student.setStuId("2016220401016");
+        student.setStuId("2016220401017");
         student.setStuCollege("xr");
         student.setStuMajor("hlw");
         student.setStuGrade("2016");
         student.setUserInfo(userInfo);
 
-        System.out.println(userService.updateStudent(student));
+        System.out.println(userService.updateStudent(student).toString());
     }
 
     @Test
     public void changePassword(){
-        System.out.println(userService.changePassword("test","222","111"));
-        System.out.println(userService.changePassword("test","111","111"));
-        System.out.println(userService.changePassword("test","111","222"));
-        System.out.println(userService.changePassword("test","222","111"));
+        System.out.println(userService.changePassword("test","222","111").toString());
+        System.out.println(userService.changePassword("test","111","111").toString());
+        System.out.println(userService.changePassword("test","111","222").toString());
+        System.out.println(userService.changePassword("test","222","111").toString());
     }
 
 }

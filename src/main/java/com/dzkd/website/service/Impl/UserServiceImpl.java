@@ -5,6 +5,7 @@ import com.dzkd.website.dao.AdminInfoMapper;
 import com.dzkd.website.dao.StudentMapper;
 import com.dzkd.website.dao.UserInfoMapper;
 import com.dzkd.website.pojo.AdminInfo;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.pojo.Student;
 import com.dzkd.website.pojo.UserInfo;
 import com.dzkd.website.service.UserService;
@@ -42,8 +43,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public JSONObject getAllStudent(int pageNum, int pageSize) {
-        if (pageNum <=0 ) {
+    public R getAllStudent(int pageNum, int pageSize) {
+        if (pageNum <= 0) {
             pageNum = 1;
         }
         if (pageSize <= 0) {
@@ -53,11 +54,11 @@ public class UserServiceImpl implements UserService {
         List<Student> studentList = studentMapper.selectAll();
         PageInfo<Student> pageInfo = new PageInfo<>(studentList);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data", studentList);
-        jsonObject.put("pageInfo", pageInfo);
+        JSONObject data = new JSONObject();
+        data.put("data", studentList);
+        data.put("pageInfo", pageInfo);
 
-        return jsonObject;
+        return R.isOk().data(data);
     }
 
     /**
@@ -68,8 +69,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public JSONObject getAllAdminInfo(int pageNum, int pageSize) {
-        if (pageNum <=0 ) {
+    public R getAllAdminInfo(int pageNum, int pageSize) {
+        if (pageNum <= 0) {
             pageNum = 1;
         }
         if (pageSize <= 0) {
@@ -79,11 +80,11 @@ public class UserServiceImpl implements UserService {
         List<AdminInfo> adminInfoList = adminInfoMapper.selectAll();
         PageInfo<AdminInfo> pageInfo = new PageInfo<>(adminInfoList);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data", adminInfoList);
-        jsonObject.put("pageInfo", pageInfo);
+        JSONObject data = new JSONObject();
+        data.put("data", adminInfoList);
+        data.put("pageInfo", pageInfo);
 
-        return jsonObject;
+        return R.isOk().data(data);
     }
 
     /**
@@ -102,41 +103,38 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 添加管理员
-     *版块1.动态信息发布2.网站运营管理3.信息展示4.用户信息管理5.在线交互
+     * 版块1.动态信息发布2.网站运营管理3.信息展示4.用户信息管理5.在线交互
+     *
      * @param adminInfo
      * @return
      */
     @Override
-    public JSONObject addAdminInfo(AdminInfo adminInfo) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
+    public R addAdminInfo(AdminInfo adminInfo) {
 
         if (adminInfo == null) {
-            resultCode = 0;
-            msg = "添加管理员失败";
-        } else {
-            UserInfo userInfo = adminInfo.getUserInfo();
-            //判断用户信息是否已存在
-            if (userInfo.getUserInfoId() == null) {
-                int insertUser = addUserInfo(userInfo);
-                logger.info("addAdminInfo->insertUser:" + insertUser + "\tuserInfoId:" + userInfo.getUserInfoId());
-                adminInfo.setUserUserInfoId(userInfo.getUserInfoId());
-            }
-            int insertAdmin = adminInfoMapper.insertSelective(adminInfo);
-            logger.info("addAdminInfo->insertAdmin:" + insertAdmin);
-            if (insertAdmin == 1) {
-                resultCode = 1;
-                msg = "添加管理员成功";
-            } else {
-                resultCode = 0;
-                msg = "添加管理员失败";
-            }
+            return R.isFail(new Exception("添加管理员失败"));
         }
 
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-        return result;
+        try {
+            //取出用户基本信息
+            UserInfo userInfo = adminInfo.getUserInfo();
+            //判断用户名是否存在
+            UserInfo userInfoTemp = userInfoMapper.selectUserName(userInfo.getUserName());
+            if (userInfoTemp != null && userInfoTemp.getUserInfoId() != userInfo.getUserInfoId()) {
+                return R.isFail(new Exception("该用户名已存在"));
+            }
+            int insertUserInfo = userInfoMapper.insertSelective(userInfo);
+            logger.info("UserServiceImpl->addAdmin->insertUserInfo:" + insertUserInfo);
+
+            adminInfo.setUserUserInfoId(userInfo.getUserInfoId());
+            int insertAdmin = adminInfoMapper.insertSelective(adminInfo);
+            logger.info("UserServiceImpl->addAdmin->insertAdmin:" + insertAdmin);
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("添加管理员失败"));
+        }
     }
 
     /**
@@ -146,39 +144,30 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public JSONObject updateAdminInfo(AdminInfo adminInfo) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
+    public R updateAdminInfo(AdminInfo adminInfo) {
         if (adminInfo == null) {
-            resultCode = 0;
-            msg = "更新管理员信息失败";
-        } else {
+            return R.isFail(new Exception("更新管理员信息失败"));
+        }
+
+        try {
             UserInfo userInfo = adminInfo.getUserInfo();
             UserInfo userInfoTemp = userInfoMapper.selectUserName(userInfo.getUserName());
             //判断用户名是否已经存在
-            if (userInfoTemp == null || userInfoTemp.getUserInfoId() == userInfo.getUserInfoId()) {
-                int updateUserInfo = userInfoMapper.updateByPrimaryKeySelective(userInfo);
-                logger.info("updateAdminInfo->updateUserInfo:" + updateUserInfo);
-                int updateAdmin = adminInfoMapper.updateByPrimaryKeySelective(adminInfo);
-                logger.info("updateAdminInfo->updateAdmin:" + updateAdmin);
-                if (updateAdmin == 1) {
-                    resultCode = 1;
-                    msg = "更新管理员信息成功";
-                } else {
-                    resultCode = 0;
-                    msg = "更新管理员信息失败";
-                }
-            } else {
-                resultCode = 0;
-                msg = "该用户名已存在";
+            if (userInfoTemp != null && userInfoTemp.getUserInfoId() != userInfo.getUserInfoId()) {
+                return R.isFail(new Exception("该用户名已存在"));
             }
+            //更新用户基本信息
+            int updateUserInfo = userInfoMapper.updateByPrimaryKeySelective(userInfo);
+            logger.info("updateAdminInfo->updateUserInfo:" + updateUserInfo);
+            //更新管理员信息
+            int updateAdmin = adminInfoMapper.updateByPrimaryKeySelective(adminInfo);
+            logger.info("updateAdminInfo->updateAdmin:" + updateAdmin);
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("更新管理员信息失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -188,37 +177,24 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public JSONObject delAdminInfo(AdminInfo adminInfo) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R delAdminInfo(AdminInfo adminInfo) {
         if (adminInfo == null) {
-            resultCode = 0;
-            msg = "删除管理员失败";
-        } else {
-            int delAdmin = adminInfoMapper.deleteByPrimaryKey(adminInfo.getAdminId());
-            logger.info("delAdminInfo->delAdmin:" + delAdmin);
-            if (delAdmin == 1) {
-                resultCode = 1;
-                msg = "删除管理员成功";
-            } else {
-                resultCode = 0;
-                msg = "删除管理员失败";
-            }
-            //判断该管理员是否为学生
-            Student student = studentMapper.selectByForeignKey(adminInfo.getUserUserInfoId());
-            if (student == null) {
-                //不是学生用户，则删除基本信息
-                int delUser = userInfoMapper.deleteByPrimaryKey(adminInfo.getUserUserInfoId());
-                logger.info("delAdminInfo->delUser:" + delUser);
-            }
+            return R.isFail(new Exception("删除管理员失败"));
         }
 
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
+        try {
+            //删除管理员信息
+            int delAdmin = adminInfoMapper.deleteByPrimaryKey(adminInfo.getAdminId());
+            logger.info("delAdminInfo->delAdmin:" + delAdmin);
+            //删除基本信息
+            int delUser = userInfoMapper.deleteByPrimaryKey(adminInfo.getUserUserInfoId());
+            logger.info("delAdminInfo->delUser:" + delUser);
 
-        return result;
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除管理员失败"));
+        }
     }
 
     /**
@@ -228,16 +204,18 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public JSONObject addStudent(Student student) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R addStudent(Student student) {
         if (student == null) {
-            resultCode = 0;
-            msg = "添加学生失败";
-        } else {
+            return R.isFail(new Exception("添加学生失败"));
+        }
+
+        try {
             UserInfo userInfo = student.getUserInfo();
+            UserInfo userInfoTemp = userInfoMapper.selectUserName(userInfo.getUserName());
+            //判断用户名是否存在
+            if (userInfoTemp != null && userInfoTemp.getUserInfoId() != userInfo.getUserInfoId()) {
+                return R.isFail(new Exception("该用户名已存在"));
+            }
             //插入用户基本信息
             int insertUser = addUserInfo(userInfo);
             logger.info("addStudent->insertUser:" + insertUser);
@@ -245,19 +223,12 @@ public class UserServiceImpl implements UserService {
             student.setUserUserInfoId(userInfo.getUserInfoId());
             int insertStu = studentMapper.insertSelective(student);
             logger.info("addStudent->insertStu:" + insertStu);
-            if (insertStu == 1) {
-                resultCode = 1;
-                msg = "添加学生成功";
-            } else {
-                resultCode = 0;
-                msg = "添加学生失败";
-            }
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("添加学生失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
 
@@ -268,86 +239,61 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public JSONObject updateStudent(Student student) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R updateStudent(Student student) {
         if (student == null) {
-            resultCode = 0;
-            msg = "更新学生信息失败";
-        } else {
+            return R.isFail(new Exception("更新学生信息失败"));
+        }
+
+        try {
             UserInfo userInfo = student.getUserInfo();
             UserInfo userInfoTemp = userInfoMapper.selectUserName(userInfo.getUserName());
             //判断用户名是否存在
-            if (userInfoTemp == null || userInfoTemp.getUserInfoId() == userInfo.getUserInfoId()) {
-                int updateUserInfo = userInfoMapper.updateByPrimaryKeySelective(userInfo);
-                logger.info("updateStudent->updateUserInfo:" + updateUserInfo);
-                int updateStu = studentMapper.updateByPrimaryKeySelective(student);
-                logger.info("updateStudent->updateStu:" + updateStu);
-                if (updateStu == 1) {
-                    resultCode = 1;
-                    msg = "更新学生信息成功";
-                } else {
-                    resultCode = 0;
-                    msg = "更新学生信息失败";
-                }
-            } else {
-                resultCode = 0;
-                msg = "更新学生信息学失败-该用户名已存在";
+            if (userInfoTemp != null && userInfoTemp.getUserInfoId() != userInfo.getUserInfoId()) {
+                return R.isFail(new Exception("该用户名已存在"));
             }
+            //更新用户基本信息
+            int updateUserInfo = userInfoMapper.updateByPrimaryKeySelective(userInfo);
+            logger.info("updateStudent->updateUserInfo:" + updateUserInfo);
+            //更行学生信息
+            int updateStu = studentMapper.updateByPrimaryKeySelective(student);
+            logger.info("updateStudent->updateStu:" + updateStu);
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("更新学生信息失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
-    }
-
-    public JSONObject delStudent() {
-        return null;
     }
 
     /**
      * 修改密码
+     *
      * @param userName
      * @param oldPassword
      * @param newPassword
      * @return
      */
     @Override
-    public JSONObject changePassword(String userName, String oldPassword, String newPassword) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R changePassword(String userName, String oldPassword, String newPassword) {
         UserInfo userInfo = userInfoMapper.selectByUserName(userName, oldPassword);
-        if (userInfo != null){
+        if (userInfo == null) {
+            return R.isFail(new Exception("原密码错误"));
+        }
+
+        try {
             if (oldPassword.equals(newPassword)) {
-                resultCode = 0;
-                msg = "新密码与原密码相同";
+                return R.isFail(new Exception("新密码与原密码相同"));
             } else {
                 userInfo.setUserPassword(newPassword);
                 int updatePassword = userInfoMapper.updateByPrimaryKeySelective(userInfo);
                 logger.info("changePassword->updatePassword:" + updatePassword);
-                if (updatePassword == 1) {
-                    resultCode = 1;
-                    msg = "密码修改成功";
-                } else {
-                    resultCode = 0;
-                    msg = "密码修改失败";
-                }
+
+                return R.isOk();
             }
-        } else {
-            resultCode = 0;
-            msg = "原密码输入错误";
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("修改密码失败"));
         }
-
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
 }
