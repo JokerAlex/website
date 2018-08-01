@@ -1,15 +1,14 @@
 package com.dzkd.website.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dzkd.website.pojo.Article;
 
-public interface ArticleService {
+public interface ArticleService<T> {
 
-    JSONObject addArticle(Article article);
+    JSONObject addArticle(T t);
 
-    JSONObject updateArticle(Article article);
+    JSONObject updateArticle(T t);
 
-    JSONObject delArticle(Article article);
+    JSONObject delArticle(T t);
 
-    JSONObject searchArticle(Article article);
+    JSONObject searchArticle(T t);
 }

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class SchoolIntroductionServiceImpl implements ArticleService {
+public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
 
     private SchoolIntroductionMapper schoolIntroductionMapper;
 
@@ -31,6 +31,7 @@ public class SchoolIntroductionServiceImpl implements ArticleService {
 
     /**
      * 更新学校简介
+     *
      * @param article
      * @return
      */
@@ -83,6 +84,7 @@ public class SchoolIntroductionServiceImpl implements ArticleService {
 
     /**
      * 查看学校简介
+     *
      * @param article
      * @return
      */
@@ -127,4 +129,5 @@ public class SchoolIntroductionServiceImpl implements ArticleService {
 
         return result;
     }
+
 }
