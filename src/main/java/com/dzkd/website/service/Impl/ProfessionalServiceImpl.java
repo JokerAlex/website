@@ -1,8 +1,8 @@
 package com.dzkd.website.service.Impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.ProfessionalIntroductionMapper;
 import com.dzkd.website.pojo.ProfessionalIntroduction;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,15 +29,12 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
      * @return
      */
     @Override
-    public JSONObject addArticle(ProfessionalIntroduction professionalIntroduction) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R addArticle(ProfessionalIntroduction professionalIntroduction) {
         if (professionalIntroduction == null) {
-            resultCode = 0;
-            msg = "添加专业介绍失败";
-        } else {
+            return R.isFail(new Exception("添加专业介绍失败"));
+        }
+
+        try {
             //重置信息
             professionalIntroduction.setProfessionalId(null);
             professionalIntroduction.setProfessionalUpdateTime(new Date().toString());
@@ -46,19 +43,11 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
             int insert = professionalIntroductionMapper.insertSelective(professionalIntroduction);
             logger.info("ProfessionalIntroductionServiceImpl->addProfessional->insert" + insert);
 
-            if (insert == 1) {
-                resultCode = 1;
-                msg = "添加专业介绍成功";
-            } else {
-                resultCode = 0;
-                msg = "添加专业介绍失败";
-            }
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("添加专业介绍失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -67,15 +56,12 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
      * @return
      */
     @Override
-    public JSONObject updateArticle(ProfessionalIntroduction professionalIntroduction) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R updateArticle(ProfessionalIntroduction professionalIntroduction) {
         if (professionalIntroduction == null) {
-            resultCode = 0;
-            msg = "更新专业简介失败";
-        } else {
+            return R.isFail(new Exception("更新专业简介失败"));
+        }
+
+        try {
             //重置信息
             professionalIntroduction.setProfessionalUpdateTime(new Date().toString());
             professionalIntroduction.setProfessionalAcessNumber(null);//访问量不在此处更新
@@ -83,19 +69,11 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
             int update = professionalIntroductionMapper.updateByPrimaryKeySelective(professionalIntroduction);
             logger.info("ProfessionalIntroductionServiceImpl->addProfessional->update" + update);
 
-            if (update == 1) {
-                resultCode = 1;
-                msg = "更新专业介绍成功";
-            } else {
-                resultCode = 0;
-                msg = "更新专业介绍失败";
-            }
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("更新专业介绍失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -104,32 +82,20 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
      * @return
      */
     @Override
-    public JSONObject delArticle(ProfessionalIntroduction professionalIntroduction) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R delArticle(ProfessionalIntroduction professionalIntroduction) {
         if (professionalIntroduction == null || professionalIntroduction.getProfessionalId() == null) {
-            resultCode = 0;
-            msg = "删除专业简介失败";
-        } else {
+            return R.isFail(new Exception("删除专业简介失败"));
+        }
+
+        try {
             int del = professionalIntroductionMapper.deleteByPrimaryKey(professionalIntroduction.getProfessionalId());
             logger.info("ProfessionalIntroductionServiceImpl->addProfessional->del" + del);
 
-            if (del == 1) {
-                resultCode = 1;
-                msg = "删除专业介绍成功";
-            } else {
-                resultCode = 0;
-                msg = "删除专业介绍失败";
-            }
-
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除专业介绍失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -138,37 +104,26 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
      * @return
      */
     @Override
-    public JSONObject searchArticle(ProfessionalIntroduction professionalIntroduction) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-        JSONObject data = new JSONObject();
-
+    public R searchArticle(ProfessionalIntroduction professionalIntroduction) {
         if (professionalIntroduction == null || professionalIntroduction.getProfessionalId() == null) {
-            resultCode = 0;
-            msg = "获取专业简介失败";
-        } else {
+            return R.isFail(new Exception("获取专业简介失败"));
+        }
+
+        try {
             ProfessionalIntroduction professional = professionalIntroductionMapper.selectByPrimaryKey(professionalIntroduction.getProfessionalId());
             if (professional == null) {
-                resultCode = 0;
-                msg = "获取专业简介失败";
+                return R.isFail(new Exception("获取专业简介失败"));
             } else {
                 //更新访问量
                 professional.setProfessionalAcessNumber(professional.getProfessionalAcessNumber() + 1);
                 int updatePageViews = professionalIntroductionMapper.updateByPrimaryKeySelective(professional);
                 logger.info("ProfessionalIntroductionServiceImpl->addProfessional->updatePageViews" + updatePageViews);
 
-                resultCode = 1;
-                msg = "获取专业简介成功";
-                data.put("article", professional);
-
+                return R.isOk();
             }
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取专业介绍失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-        result.put("data", data);
-
-        return result;
     }
 }

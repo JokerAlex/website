@@ -1,9 +1,9 @@
 package com.dzkd.website.service.Impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.EmployInfoMapper;
 import com.dzkd.website.pojo.Article;
 import com.dzkd.website.pojo.EmployInfo;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,15 +30,12 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
      * @return
      */
     @Override
-    public JSONObject addArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R addArticle(Article article) {
         if (article == null) {
-            resultCode = 0;
-            msg = "添加就业信息失败";
-        } else {
+            return R.isFail(new Exception("添加就业信息失败"));
+        }
+
+        try {
             //重置信息
             article.setArticleId(null);
             article.setUpdateTime(new Date().toString());
@@ -48,19 +45,11 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
             int insert = employInfoMapper.insertSelective(employInfo);
             logger.info("EmployInfoServiceImpl->insert:" + insert);
 
-            if (insert == 1) {
-                resultCode = 1;
-                msg = "添加就业信息成功";
-            } else {
-                resultCode = 0;
-                msg = "添加就业信息失败";
-            }
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("添加就业信息失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -69,15 +58,12 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
      * @return
      */
     @Override
-    public JSONObject updateArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R updateArticle(Article article) {
         if (article == null || article.getArticleId() == null) {
-            resultCode = 0;
-            msg = "更新就业信息失败";
-        } else {
+            return R.isFail(new Exception("更新就业信息失败"));
+        }
+
+        try {
             //重置信息
             article.setUpdateTime(new Date().toString());
             article.setPageViews(null);//访问量不在此处更新
@@ -86,20 +72,11 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
             int update = employInfoMapper.updateByPrimaryKeySelective(employInfo);
             logger.info("EmployInfoServiceImpl->update:" + update);
 
-            if (update == 1) {
-                resultCode = 1;
-                msg = "更新就业信息成功";
-            } else {
-                resultCode = 0;
-                msg = "更新就业信息失败";
-            }
-
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("更新就业信息失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -108,31 +85,20 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
      * @return
      */
     @Override
-    public JSONObject delArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R delArticle(Article article) {
         if (article == null || article.getArticleId() == null) {
-            resultCode = 0;
-            msg = "删除就业信息失败";
-        } else {
+            return R.isFail(new Exception("删除就业信息失败"));
+        }
+
+        try {
             int del = employInfoMapper.deleteByPrimaryKey(article.getArticleId());
             logger.info("EmployInfoServiceImpl->del:" + del);
 
-            if (del == 1) {
-                resultCode = 1;
-                msg = "删除就业信息成功";
-            } else {
-                resultCode = 0;
-                msg = "删除就业信息失败";
-            }
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("更新就业信息失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -141,20 +107,15 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
      * @return
      */
     @Override
-    public JSONObject searchArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-        JSONObject data = new JSONObject();
-
+    public R searchArticle(Article article) {
         if (article == null || article.getArticleId() == null) {
-            resultCode = 0;
-            msg = "获取就业信息失败";
-        } else {
+            return R.isFail(new Exception("获取就业信息失败"));
+        }
+
+        try {
             EmployInfo employInfo = employInfoMapper.selectByPrimaryKey(article.getArticleId());
             if (employInfo == null) {
-                resultCode = 0;
-                msg = "获取就业信息失败";
+                return R.isFail(new Exception("获取就业信息失败"));
             } else {
                 Article articleResult = new Article(
                         employInfo.getEmpInfoId(),
@@ -169,17 +130,12 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
                 int updatePageViews = employInfoMapper.updateByPrimaryKeySelective(employInfo);
                 logger.info("EmployInfoServiceImpl->updatePageViews:" + updatePageViews);
 
-                resultCode = 1;
-                msg = "获取就业信息成功";
-                data.put("article", articleResult);
+                return  R.isOk().data(articleResult);
             }
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取就业信息失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-        result.put("data", data);
-
-        return result;
     }
 
     private EmployInfo transform(Article article) {

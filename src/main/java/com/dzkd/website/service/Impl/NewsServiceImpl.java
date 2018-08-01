@@ -1,9 +1,9 @@
 package com.dzkd.website.service.Impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.NewsMapper;
 import com.dzkd.website.dao.NewsTypeMapper;
 import com.dzkd.website.pojo.News;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,22 +25,22 @@ public class NewsServiceImpl implements ArticleService<News> {
     }
 
     @Override
-    public JSONObject addArticle(News news) {
+    public R addArticle(News news) {
         return null;
     }
 
     @Override
-    public JSONObject updateArticle(News news) {
+    public R updateArticle(News news) {
         return null;
     }
 
     @Override
-    public JSONObject delArticle(News news) {
+    public R delArticle(News news) {
         return null;
     }
 
     @Override
-    public JSONObject searchArticle(News news) {
+    public R searchArticle(News news) {
         return null;
     }
 }

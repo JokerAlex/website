@@ -1,7 +1,7 @@
 package com.dzkd.website.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.pojo.Article;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
 import com.dzkd.website.service.Impl.DepartmentIntroductionServiceImpl;
 import com.dzkd.website.service.Impl.SchoolIntroductionServiceImpl;
@@ -24,34 +24,34 @@ public class StaticInfoController {
     }
 
     @RequestMapping(value = "/school", method = RequestMethod.GET)
-    public JSONObject showSchoolIntroduction() {
+    public R showSchoolIntroduction() {
         return school.searchArticle(null);
     }
 
     @RequestMapping(value = "/articleAdmin/school", method = RequestMethod.PUT)
-    public JSONObject updateSchoolIntroduction(@RequestBody Article article) {
+    public R updateSchoolIntroduction(@RequestBody Article article) {
         return school.updateArticle(article);
     }
 
 
     @RequestMapping(value = "/department", method = RequestMethod.GET)
-    public JSONObject showDepartmentIntroduction(@RequestBody Article article) {
+    public R showDepartmentIntroduction(@RequestBody Article article) {
         return department.searchArticle(article);
     }
 
     @RequestMapping(value = "/articleAdmin/department", method = RequestMethod.POST)
-    public JSONObject addDepartmentIntroduction(@RequestBody Article article) {
+    public R addDepartmentIntroduction(@RequestBody Article article) {
         return department.addArticle(article);
     }
 
     @RequestMapping(value = "/articleAdmin/department", method = RequestMethod.PUT)
-    public JSONObject updateDepartmentIntroduction(@RequestBody Article article) {
+    public R updateDepartmentIntroduction(@RequestBody Article article) {
         return department.updateArticle(article);
     }
 
 
     @RequestMapping(value = "/articleAdmin/department", method = RequestMethod.DELETE)
-    public JSONObject delDepartmentIntroduction(@RequestBody Article article) {
+    public R delDepartmentIntroduction(@RequestBody Article article) {
         return department.delArticle(article);
     }
 }

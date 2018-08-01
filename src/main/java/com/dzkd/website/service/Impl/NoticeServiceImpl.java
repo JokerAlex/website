@@ -1,8 +1,8 @@
 package com.dzkd.website.service.Impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.NoticeMapper;
 import com.dzkd.website.pojo.Notice;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,22 +22,22 @@ public class NoticeServiceImpl implements ArticleService<Notice> {
     }
 
     @Override
-    public JSONObject addArticle(Notice notice) {
+    public R addArticle(Notice notice) {
         return null;
     }
 
     @Override
-    public JSONObject updateArticle(Notice notice) {
+    public R updateArticle(Notice notice) {
         return null;
     }
 
     @Override
-    public JSONObject delArticle(Notice notice) {
+    public R delArticle(Notice notice) {
         return null;
     }
 
     @Override
-    public JSONObject searchArticle(Notice notice) {
+    public R searchArticle(Notice notice) {
         return null;
     }
 }

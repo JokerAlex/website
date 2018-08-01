@@ -1,9 +1,9 @@
 package com.dzkd.website.service.Impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.DepartmentIntroductionMapper;
 import com.dzkd.website.pojo.Article;
 import com.dzkd.website.pojo.DepartmentIntroduction;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,15 +30,12 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
      * @return
      */
     @Override
-    public JSONObject addArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R addArticle(Article article) {
         if (article == null) {
-            resultCode = 0;
-            msg = "添加院系简介失败";
-        } else {
+            return R.isFail(new Exception("添加院系简介失败"));
+        }
+
+        try {
             //重置信息
             article.setArticleId(null);
             article.setUpdateTime(new Date().toString());
@@ -48,19 +45,11 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
             int insertDepartment = departmentIntroductionMapper.insertSelective(departmentIntroduction);
             logger.info("DepartmentIntroductionServiceImpl->add->insertDepartment:" + insertDepartment);
 
-            if (insertDepartment == 1) {
-                resultCode = 1;
-                msg = "添加院系简介成功";
-            } else {
-                resultCode = 0;
-                msg = "添加院系简介失败";
-            }
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("添加院系简介失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -69,15 +58,12 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
      * @return
      */
     @Override
-    public JSONObject updateArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R updateArticle(Article article) {
         if (article == null || article.getArticleId() == null) {
-            resultCode = 0;
-            msg = "更新院系简介失败";
-        } else {
+            return R.isFail(new Exception("更新院系简介失败"));
+        }
+
+        try {
             //重置信息
             article.setUpdateTime(new Date().toString());
             article.setPageViews(null);//访问量不在此处更新
@@ -86,20 +72,11 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
             int updateDepartment = departmentIntroductionMapper.updateByPrimaryKeySelective(departmentIntroduction);
             logger.info("DepartmentIntroductionServiceImpl->add->updateDepartment:" + updateDepartment);
 
-            if (updateDepartment == 1) {
-                resultCode = 1;
-                msg = "更新院系简介成功";
-            } else {
-                resultCode = 0;
-                msg = "更新院系简介失败";
-            }
-
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("更新院系简介失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -108,31 +85,20 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
      * @return
      */
     @Override
-    public JSONObject delArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R delArticle(Article article) {
         if (article == null || article.getArticleId() == null) {
-            resultCode = 0;
-            msg = "删除院系简介失败";
-        } else {
+            return R.isFail(new Exception("删除院系简介失败"));
+        }
+
+        try {
             int delDepartment = departmentIntroductionMapper.deleteByPrimaryKey(article.getArticleId());
             logger.info("DepartmentIntroductionServiceImpl->add->delDepartment:" + delDepartment);
 
-            if (delDepartment == 1) {
-                resultCode = 1;
-                msg = "删除院系简介成功";
-            } else {
-                resultCode = 0;
-                msg = "删除院系简介失败";
-            }
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除院系简介失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     /**
@@ -141,20 +107,15 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
      * @return
      */
     @Override
-    public JSONObject searchArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-        JSONObject data = new JSONObject();
-
+    public R searchArticle(Article article) {
         if (article == null || article.getArticleId() == null) {
-            resultCode = 0;
-            msg = "获取院系简介信息失败";
-        } else {
+            return R.isFail(new Exception("获取院系简介信息失败"));
+        }
+
+        try {
             DepartmentIntroduction departmentIntroduction = departmentIntroductionMapper.selectByPrimaryKey(article.getArticleId());
             if (departmentIntroduction == null) {
-                resultCode = 0;
-                msg = "获取院系简介信息失败";
+                return R.isFail(new Exception("获取院系简介信息失败"));
             } else {
                 Article articleResult = new Article(
                         departmentIntroduction.getDepartmentId(),
@@ -169,17 +130,12 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
                 int updatePageViews = departmentIntroductionMapper.updateByPrimaryKeySelective(departmentIntroduction);
                 logger.info("DepartmentIntroductionServiceImpl->add->updatePageViews:" + updatePageViews);
 
-                resultCode = 1;
-                msg = "获取院系简介信息成功";
-                data.put("article", articleResult);
+                return R.isOk().data(articleResult);
             }
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取院系简介信息失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-        result.put("data", data);
-
-        return result;
     }
 
     private DepartmentIntroduction transform(Article article) {

@@ -1,8 +1,8 @@
 package com.dzkd.website.service.Impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.SchoolIntroductionMapper;
 import com.dzkd.website.pojo.Article;
+import com.dzkd.website.pojo.R;
 import com.dzkd.website.pojo.SchoolIntroduction;
 import com.dzkd.website.service.ArticleService;
 import org.apache.logging.log4j.LogManager;
@@ -25,7 +25,7 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
     }
 
     @Override
-    public JSONObject addArticle(Article article) {
+    public R addArticle(Article article) {
         return null;
     }
 
@@ -36,15 +36,12 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
      * @return
      */
     @Override
-    public JSONObject updateArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-
+    public R updateArticle(Article article) {
         if (article == null) {
-            resultCode = 0;
-            msg = "学校简介更新失败";
-        } else {
+            return R.isFail(new Exception("学校简介更新失败"));
+        }
+
+        try {
             if (article.getArticleId() != 1) {
                 article.setArticleId(1);
             }
@@ -58,27 +55,19 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
                     article.getPageViews(),
                     article.getAdminId()
             );
-
+            //更新学校简介信息
             int update = schoolIntroductionMapper.updateByPrimaryKeySelective(schoolIntroduction);
             logger.info("SchoolIntroductionServiceImpl->updateArticle->update:" + update);
 
-            if (update == 1) {
-                resultCode = 1;
-                msg = "学校简介更新成功";
-            } else {
-                resultCode = 0;
-                msg = "学校简介更新失败";
-            }
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("更新学校简介失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-
-        return result;
     }
 
     @Override
-    public JSONObject delArticle(Article article) {
+    public R delArticle(Article article) {
         return null;
     }
 
@@ -89,22 +78,13 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
      * @return
      */
     @Override
-    public JSONObject searchArticle(Article article) {
-        JSONObject result = new JSONObject();
-        int resultCode;
-        String msg;
-        JSONObject data = new JSONObject();
-
+    public R searchArticle(Article article) {
         if (article == null) {
-            article = new Article();
-            article.setArticleId(1);
+            return R.isFail(new Exception("获取学校简介失败"));
         }
-
-        SchoolIntroduction schoolIntroduction = schoolIntroductionMapper.selectByPrimaryKey(article.getArticleId());
-        if (schoolIntroduction == null) {
-            resultCode = 0;
-            msg = "学校简介获取失败";
-        } else {
+        try {
+            article.setArticleId(1);
+            SchoolIntroduction schoolIntroduction = schoolIntroductionMapper.selectByPrimaryKey(article.getArticleId());
             Article school = new Article(
                     schoolIntroduction.getSchoolId(),
                     schoolIntroduction.getAdminAdminId(),
@@ -118,16 +98,10 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
             int updatePageViews = schoolIntroductionMapper.updateByPrimaryKeySelective(schoolIntroduction);
             logger.info("SchoolIntroductionServiceImpl->updateArticle->updatePageViews:" + updatePageViews);
 
-            resultCode = 1;
-            msg = "学校简介获取成功";
-            data.put("article", school);
+            return R.isOk().data(school);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取学校简介失败"));
         }
-
-        result.put("resultCode", resultCode);
-        result.put("msg", msg);
-        result.put("data", data);
-
-        return result;
     }
-
 }
