@@ -1,16 +1,21 @@
 package com.dzkd.website.service.Impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.DepartmentIntroductionMapper;
 import com.dzkd.website.pojo.Article;
 import com.dzkd.website.pojo.DepartmentIntroduction;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class DepartmentIntroductionServiceImpl implements ArticleService<Article> {
@@ -136,6 +141,41 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
             logger.catching(e);
             return R.isFail(new Exception("获取院系简介信息失败"));
         }
+    }
+
+    /**
+     * 返回列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public R showAll(int pageNum, int pageSize) {
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<DepartmentIntroduction> departmentIntroductionList = departmentIntroductionMapper.selectAll();
+        PageInfo<DepartmentIntroduction> pageInfo = new PageInfo<>(departmentIntroductionList);
+        List<Article> articleList = new ArrayList<>();
+        for (int i=0;i<departmentIntroductionList.size();i++) {
+            Article article = new Article();
+            article.setArticleId(departmentIntroductionList.get(i).getDepartmentId());
+            article.setUpdateTime(departmentIntroductionList.get(i).getDepartmentUpdateTime());
+            article.setArticleTitle(departmentIntroductionList.get(i).getDepartmentTitle());
+            article.setAdminId(departmentIntroductionList.get(i).getAdminAdminId());
+            articleList.add(i,article);
+        }
+
+        JSONObject data = new JSONObject();
+        data.put("data", articleList);
+        data.put("pageInfo", pageInfo);
+
+        return R.isOk().data(data);
     }
 
     private DepartmentIntroduction transform(Article article) {

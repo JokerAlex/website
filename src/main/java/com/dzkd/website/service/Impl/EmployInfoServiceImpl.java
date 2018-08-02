@@ -1,16 +1,21 @@
 package com.dzkd.website.service.Impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.EmployInfoMapper;
 import com.dzkd.website.pojo.Article;
 import com.dzkd.website.pojo.EmployInfo;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class EmployInfoServiceImpl implements ArticleService<Article> {
@@ -136,6 +141,43 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
             logger.catching(e);
             return R.isFail(new Exception("获取就业信息失败"));
         }
+    }
+
+    /**
+     * 返回列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public R showAll(int pageNum, int pageSize) {
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<EmployInfo> employInfoList = employInfoMapper.selectAll();
+        PageInfo<EmployInfo> pageInfo = new PageInfo<>(employInfoList);
+
+        List<Article> articleList = new ArrayList<>();
+        for (int i=0;i<employInfoList.size();i++) {
+            Article article = new Article();
+            article.setArticleId(employInfoList.get(i).getEmpInfoId());
+            article.setUpdateTime(employInfoList.get(i).getEmpInfoTime());
+            article.setArticleTitle(employInfoList.get(i).getEmpInfoTitle());
+            article.setAdminId(employInfoList.get(i).getAdminAdminId());
+            articleList.add(i,article);
+        }
+
+
+        JSONObject data = new JSONObject();
+        data.put("data", articleList);
+        data.put("pageInfo", pageInfo);
+
+        return R.isOk().data(data);
     }
 
     private EmployInfo transform(Article article) {

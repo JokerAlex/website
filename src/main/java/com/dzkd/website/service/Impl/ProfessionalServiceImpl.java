@@ -1,15 +1,19 @@
 package com.dzkd.website.service.Impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.ProfessionalIntroductionMapper;
 import com.dzkd.website.pojo.ProfessionalIntroduction;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntroduction> {
@@ -125,5 +129,31 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
             logger.catching(e);
             return R.isFail(new Exception("获取专业介绍失败"));
         }
+    }
+
+    /**
+     * 返回列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public R showAll(int pageNum, int pageSize) {
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<ProfessionalIntroduction> professionalIntroductionList = professionalIntroductionMapper.selectAll();
+        PageInfo<ProfessionalIntroduction> pageInfo = new PageInfo<>(professionalIntroductionList);
+
+        JSONObject data = new JSONObject();
+        data.put("data", professionalIntroductionList);
+        data.put("pageInfo", pageInfo);
+
+        return R.isOk().data(data);
     }
 }

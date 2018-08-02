@@ -1,14 +1,19 @@
 package com.dzkd.website.service.Impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.NewsMapper;
-import com.dzkd.website.dao.NewsTypeMapper;
 import com.dzkd.website.pojo.News;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class NewsServiceImpl implements ArticleService<News> {
@@ -16,31 +21,142 @@ public class NewsServiceImpl implements ArticleService<News> {
     private static final Logger logger = LogManager.getLogger(NewsServiceImpl.class);
 
     private NewsMapper newsMapper;
-    private NewsTypeMapper newsTypeMapper;
 
     @Autowired
-    public NewsServiceImpl(NewsMapper newsMapper, NewsTypeMapper newsTypeMapper) {
+    public NewsServiceImpl(NewsMapper newsMapper) {
         this.newsMapper = newsMapper;
-        this.newsTypeMapper = newsTypeMapper;
     }
 
+    /**
+     * 添加新闻
+     *
+     * @param news
+     * @return
+     */
     @Override
     public R addArticle(News news) {
-        return null;
+        if (news == null || news.getNewsTypeTypeId() == null) {
+            return R.isFail(new Exception("添加新闻失败"));
+        }
+
+        try {
+            //重置信息
+            news.setNewsId(null);
+            news.setNewsTime(new Date().toString());
+            news.setNewsAcessNumber(0);
+
+            int insert = newsMapper.insertSelective(news);
+            logger.info("NewsServiceImpl->insert:" + insert);
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("添加新闻失败"));
+        }
     }
 
+    /**
+     * 更新新闻
+     *
+     * @param news
+     * @return
+     */
     @Override
     public R updateArticle(News news) {
-        return null;
+        if (news == null) {
+            return R.isFail(new Exception("更新新闻失败"));
+        }
+
+        try {
+            //重置信息
+            news.setNewsAcessNumber(null);//访问量不在此处更新
+            news.setNewsTime(new Date().toString());
+
+            int update = newsMapper.updateByPrimaryKeySelective(news);
+            logger.info("NewsServiceImpl->update:" + update);
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("更新新闻失败"));
+        }
     }
 
+    /**
+     * 删除
+     *
+     * @param news
+     * @return
+     */
     @Override
     public R delArticle(News news) {
-        return null;
+        if (news == null || news.getNewsId() == null) {
+            return R.isFail(new Exception("删除新闻失败"));
+        }
+
+        try {
+            int del = newsMapper.deleteByPrimaryKey(news.getNewsId());
+            logger.info("NewsServiceImpl->del:" + del);
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除新闻失败"));
+        }
     }
 
+    /**
+     * 查看新闻
+     *
+     * @param news
+     * @return
+     */
     @Override
     public R searchArticle(News news) {
-        return null;
+        if (news == null || news.getNewsId() == null) {
+            return R.isFail(new Exception("获取新闻失败"));
+        }
+
+        try {
+            News newsResult = newsMapper.selectByPrimaryKey(news.getNewsId());
+            if (newsResult == null) {
+                return R.isFail(new Exception("获取新闻失败"));
+            }
+            //更新访问量
+            newsResult.setNewsAcessNumber(newsResult.getNewsAcessNumber() + 1);
+            int updatePageViews = newsMapper.updateByPrimaryKeySelective(newsResult);
+            logger.info("NewsServiceImpl->updatePageViews:" + updatePageViews);
+
+            return R.isOk().data(newsResult);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除新闻失败"));
+        }
+    }
+
+    /**
+     * 返回列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public R showAll(int pageNum, int pageSize) {
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<News> newsList = newsMapper.selectAll();
+        PageInfo<News> pageInfo = new PageInfo<>(newsList);
+
+        JSONObject data = new JSONObject();
+        data.put("data", newsList);
+        data.put("pageInfo", pageInfo);
+
+        return R.isOk().data(data);
     }
 }

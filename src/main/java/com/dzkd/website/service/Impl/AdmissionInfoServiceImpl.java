@@ -1,16 +1,21 @@
 package com.dzkd.website.service.Impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.AdmissionInfoMapper;
 import com.dzkd.website.pojo.AdmissionInfo;
 import com.dzkd.website.pojo.Article;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AdmissionInfoServiceImpl implements ArticleService<Article> {
@@ -136,6 +141,36 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
             logger.catching(e);
             return R.isFail(new Exception("获取招生信息失败"));
         }
+    }
+
+    @Override
+    public R showAll(int pageNum, int pageSize) {
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<AdmissionInfo> admissionInfoList = admissionInfoMapper.selectAll();
+        PageInfo<AdmissionInfo> pageInfo = new PageInfo<>(admissionInfoList);
+
+        List<Article> articleList = new ArrayList<>();
+        for (int i=0;i<admissionInfoList.size();i++) {
+            Article article = new Article();
+            article.setArticleId(admissionInfoList.get(i).getAdmInfoId());
+            article.setUpdateTime(admissionInfoList.get(i).getAdmInfoTime());
+            article.setArticleTitle(admissionInfoList.get(i).getAdmInfoTitle());
+            article.setAdminId(admissionInfoList.get(i).getAdminAdminId());
+            articleList.add(i,article);
+        }
+
+        JSONObject data = new JSONObject();
+        data.put("data", articleList);
+        data.put("pageInfo", pageInfo);
+
+        return R.isOk().data(data);
     }
 
     private AdmissionInfo transform(Article article) {

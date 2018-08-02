@@ -104,4 +104,9 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
             return R.isFail(new Exception("获取学校简介失败"));
         }
     }
+
+    @Override
+    public R showAll(int pageNum, int pageSize) {
+        return null;
+    }
 }
