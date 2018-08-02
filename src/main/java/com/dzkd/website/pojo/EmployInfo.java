@@ -22,6 +22,13 @@ public class EmployInfo {
         this.adminAdminId = adminAdminId;
     }
 
+    public EmployInfo(Integer empInfoId, String empInfoTitle, String empInfoTime, Integer adminAdminId) {
+        this.empInfoId = empInfoId;
+        this.empInfoTitle = empInfoTitle;
+        this.empInfoTime = empInfoTime;
+        this.adminAdminId = adminAdminId;
+    }
+
     public EmployInfo() {
         super();
     }

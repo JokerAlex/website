@@ -19,6 +19,12 @@ public class Notice {
         this.adminAdminId = adminAdminId;
     }
 
+    public Notice(Integer noticeId, String noticeTime, Integer adminAdminId) {
+        this.noticeId = noticeId;
+        this.noticeTime = noticeTime;
+        this.adminAdminId = adminAdminId;
+    }
+
     public Notice() {
         super();
     }

@@ -15,6 +15,8 @@ public class ProfessionalIntroduction {
 
     private Integer departmentIntroductionDepartmentId;
 
+    private String departmentTitle;
+
     public ProfessionalIntroduction(Integer professionalId, String professionalTitle, String professionalUpdateTime, String professionalContent, Integer professionalAcessNumber, Integer adminAdminId, Integer departmentIntroductionDepartmentId) {
         this.professionalId = professionalId;
         this.professionalTitle = professionalTitle;
@@ -23,6 +25,15 @@ public class ProfessionalIntroduction {
         this.professionalAcessNumber = professionalAcessNumber;
         this.adminAdminId = adminAdminId;
         this.departmentIntroductionDepartmentId = departmentIntroductionDepartmentId;
+    }
+
+    public ProfessionalIntroduction(Integer professionalId, String professionalTitle, String professionalUpdateTime, Integer adminAdminId, Integer departmentIntroductionDepartmentId, String departmentTitle) {
+        this.professionalId = professionalId;
+        this.professionalTitle = professionalTitle;
+        this.professionalUpdateTime = professionalUpdateTime;
+        this.adminAdminId = adminAdminId;
+        this.departmentIntroductionDepartmentId = departmentIntroductionDepartmentId;
+        this.departmentTitle = departmentTitle;
     }
 
     public ProfessionalIntroduction() {
@@ -83,5 +94,13 @@ public class ProfessionalIntroduction {
 
     public void setDepartmentIntroductionDepartmentId(Integer departmentIntroductionDepartmentId) {
         this.departmentIntroductionDepartmentId = departmentIntroductionDepartmentId;
+    }
+
+    public String getDepartmentTitle() {
+        return departmentTitle;
+    }
+
+    public void setDepartmentTitle(String departmentTitle) {
+        this.departmentTitle = departmentTitle == null ? null : departmentTitle.trim();
     }
 }

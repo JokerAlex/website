@@ -15,6 +15,8 @@ public class News {
 
     private Integer newsTypeTypeId;
 
+    private String newsTypeName;
+
     public News(Integer newsId, String newsTitle, String newsContent, String newsTime, Integer newsAcessNumber, Integer adminAdminId, Integer newsTypeTypeId) {
         this.newsId = newsId;
         this.newsTitle = newsTitle;
@@ -23,6 +25,15 @@ public class News {
         this.newsAcessNumber = newsAcessNumber;
         this.adminAdminId = adminAdminId;
         this.newsTypeTypeId = newsTypeTypeId;
+    }
+
+    public News(Integer newsId, String newsTitle, String newsTime, Integer adminAdminId, Integer newsTypeTypeId, String newsTypeName) {
+        this.newsId = newsId;
+        this.newsTitle = newsTitle;
+        this.newsTime = newsTime;
+        this.adminAdminId = adminAdminId;
+        this.newsTypeTypeId = newsTypeTypeId;
+        this.newsTypeName = newsTypeName;
     }
 
     public News() {
@@ -83,5 +94,13 @@ public class News {
 
     public void setNewsTypeTypeId(Integer newsTypeTypeId) {
         this.newsTypeTypeId = newsTypeTypeId;
+    }
+
+    public String getNewsTypeName() {
+        return newsTypeName;
+    }
+
+    public void setNewsTypeName(String newsTypeName) {
+        this.newsTypeName = newsTypeName;
     }
 }

@@ -22,6 +22,13 @@ public class DepartmentIntroduction {
         this.adminAdminId = adminAdminId;
     }
 
+    public DepartmentIntroduction(Integer departmentId, String departmentTitle, String departmentUpdateTime, Integer adminAdminId) {
+        this.departmentId = departmentId;
+        this.departmentTitle = departmentTitle;
+        this.departmentUpdateTime = departmentUpdateTime;
+        this.adminAdminId = adminAdminId;
+    }
+
     public DepartmentIntroduction() {
         super();
     }

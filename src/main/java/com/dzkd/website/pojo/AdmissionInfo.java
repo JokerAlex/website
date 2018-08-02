@@ -22,6 +22,13 @@ public class AdmissionInfo {
         this.adminAdminId = adminAdminId;
     }
 
+    public AdmissionInfo(Integer admInfoId, String admInfoTitle, String admInfoTime, Integer adminAdminId) {
+        this.admInfoId = admInfoId;
+        this.admInfoTitle = admInfoTitle;
+        this.admInfoTime = admInfoTime;
+        this.adminAdminId = adminAdminId;
+    }
+
     public AdmissionInfo() {
         super();
     }
