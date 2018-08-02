@@ -14,51 +14,19 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @RestController
-public class UserAdminController {
+public class UserController {
 
     private UserService userService;
 
     @Autowired
-    public UserAdminController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @RequestMapping(value = "/userAdmin/stu", method = RequestMethod.GET)
-    public R showStudents(int pageNum, int pageSize) {
-        return userService.getAllStudent(pageNum, pageSize);
-    }
-
-    @RequestMapping(value = "/userAdmin/stu", method = RequestMethod.POST)
-    public R addStudent(@RequestBody Student student) {
-        return userService.addStudent(student);
     }
 
     @RequestMapping(value = "/stu", method = RequestMethod.PUT)
     public R updateStudent(@RequestBody Student student) {
         return userService.updateStudent(student);
     }
-
-
-    @RequestMapping(value = "/userAdmin/admin", method = RequestMethod.GET)
-    public R showAdmins(int pageNum, int pageSize) {
-        return userService.getAllAdminInfo(pageNum, pageSize);
-    }
-
-    @RequestMapping(value = "/userAdmin/admin", method = RequestMethod.POST)
-    public R addAdmin(@RequestBody AdminInfo adminInfo) {
-        return userService.addAdminInfo(adminInfo);
-    }
-
-    @RequestMapping(value = "/userAdmin/admin", method = RequestMethod.PUT)
-    public R updateAdmin(@RequestBody AdminInfo adminInfo) {
-        return userService.updateAdminInfo(adminInfo);
-    }
-
-    @RequestMapping(value = "/userAdmin/admin", method = RequestMethod.DELETE)
-    public R delAdmin(@RequestBody AdminInfo adminInfo) {
-        return userService.delAdminInfo(adminInfo);
-    }
-
 
     @RequestMapping(value = "/changePass", method = RequestMethod.PUT)
     public R changePassword(HttpServletRequest request, @RequestBody Map<String, String> map) {
