@@ -3,6 +3,8 @@ package com.dzkd.website.dao;
 import com.dzkd.website.pojo.AdmissionInfo;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AdmissionInfoMapper {
     int deleteByPrimaryKey(Integer admInfoId);
@@ -12,6 +14,8 @@ public interface AdmissionInfoMapper {
     int insertSelective(AdmissionInfo record);
 
     AdmissionInfo selectByPrimaryKey(Integer admInfoId);
+
+    List<AdmissionInfo> selectAll();
 
     int updateByPrimaryKeySelective(AdmissionInfo record);
 

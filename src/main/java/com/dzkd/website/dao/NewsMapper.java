@@ -3,6 +3,8 @@ package com.dzkd.website.dao;
 import com.dzkd.website.pojo.News;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface NewsMapper {
     int deleteByPrimaryKey(Integer newsId);
@@ -12,6 +14,8 @@ public interface NewsMapper {
     int insertSelective(News record);
 
     News selectByPrimaryKey(Integer newsId);
+
+    List<News> selectAll();
 
     int updateByPrimaryKeySelective(News record);
 
