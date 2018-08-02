@@ -11,6 +11,16 @@
       <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
+
+    <resultMap id="allResultMap" type="com.dzkd.website.pojo.DepartmentIntroduction" >
+        <constructor >
+            <idArg column="department_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="department_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="department_update_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+        </constructor>
+    </resultMap>
+
   <sql id="Base_Column_List" >
     department_id, department_title, department_update_time, department_content, department_acess_number, 
     Admin_admin_id
@@ -21,6 +31,14 @@
     from Department_introduction
     where department_id = #{departmentId,jdbcType=INTEGER}
   </select>
+
+  <!--获取所有信息-->
+  <select id="selectAll" resultMap="allResultMap">
+    select department_id, department_title, department_update_time, Admin_admin_id
+    from Department_introduction
+    order by department_update_time
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from Department_introduction
     where department_id = #{departmentId,jdbcType=INTEGER}
