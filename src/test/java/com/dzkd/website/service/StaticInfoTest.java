@@ -1,6 +1,5 @@
 package com.dzkd.website.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.pojo.Article;
 import com.dzkd.website.service.Impl.DepartmentIntroductionServiceImpl;
 import com.dzkd.website.service.Impl.SchoolIntroductionServiceImpl;
@@ -67,5 +66,10 @@ public class StaticInfoTest {
         Article article = new Article();
         article.setArticleId(3);
         System.out.println(departmentService.delArticle(article).toString());
+    }
+
+    @Test
+    public void showAllDepartment(){
+        System.out.println(departmentService.showAll(1,5));
     }
 }

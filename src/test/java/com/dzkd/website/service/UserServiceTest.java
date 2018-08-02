@@ -20,7 +20,7 @@ public class UserServiceTest {
 
     @Test
     public void getAllAdminInfo(){
-        System.out.println(userService.getAllAdminInfo(2,5).toString());
+        System.out.println(userService.getAllAdminInfo(1,5).toString());
     }
 
     @Test
