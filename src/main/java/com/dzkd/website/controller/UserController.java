@@ -28,7 +28,7 @@ public class UserController {
         return userService.updateStudent(student);
     }
 
-    @RequestMapping(value = "/changePass", method = RequestMethod.PUT)
+    @RequestMapping(value = "/stu/changePass", method = RequestMethod.PUT)
     public R changePassword(HttpServletRequest request, @RequestBody Map<String, String> map) {
         HttpSession session = request.getSession(false);
         JSONObject data = (JSONObject) session.getAttribute(session.getId() + "userData");

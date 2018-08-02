@@ -4,10 +4,7 @@ import com.dzkd.website.pojo.*;
 import com.dzkd.website.service.ArticleService;
 import com.dzkd.website.service.Impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class InfoController {
@@ -46,8 +43,10 @@ public class InfoController {
      * =================================================================================================================
      */
 
-    @RequestMapping(value = "/admission", method = RequestMethod.GET)
-    public R searchAdmissionInfo(@RequestBody Article article) {
+    @RequestMapping(value = "/admission/{articleId}", method = RequestMethod.GET)
+    public R searchAdmissionInfo(@PathVariable(name = "articleId") int articleId) {
+        Article article = new Article();
+        article.setArticleId(articleId);
         return admissionService.searchArticle(article);
     }
 
@@ -62,8 +61,10 @@ public class InfoController {
      * =================================================================================================================
      */
 
-    @RequestMapping(value = "/department", method = RequestMethod.GET)
-    public R searchDepartment(@RequestBody Article article) {
+    @RequestMapping(value = "/department/{articleId}", method = RequestMethod.GET)
+    public R searchDepartment(@PathVariable(name = "articleId") int articleId) {
+        Article article = new Article();
+        article.setArticleId(articleId);
         return departmentService.searchArticle(article);
     }
 
@@ -78,8 +79,10 @@ public class InfoController {
      * =================================================================================================================
      */
 
-    @RequestMapping(value = "/employ", method = RequestMethod.GET)
-    public R searchEmployInfo(@RequestBody Article article) {
+    @RequestMapping(value = "/employ/{articleId}", method = RequestMethod.GET)
+    public R searchEmployInfo(@PathVariable(name = "articleId") int articleId) {
+        Article article = new Article();
+        article.setArticleId(articleId);
         return employInfoService.searchArticle(article);
     }
 
@@ -94,8 +97,10 @@ public class InfoController {
      * =================================================================================================================
      */
 
-    @RequestMapping(value = "/news", method = RequestMethod.GET)
-    public R searchNews(@RequestBody News news) {
+    @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
+    public R searchNews(@PathVariable(name = "newsId") int newsId) {
+        News news = new News();
+        news.setNewsId(newsId);
         return newsService.searchArticle(news);
     }
 
@@ -110,8 +115,10 @@ public class InfoController {
      * =================================================================================================================
      */
 
-    @RequestMapping(value = "/news/type", method = RequestMethod.GET)
-    public R searchNewsType(@RequestBody NewsType newsType) {
+    @RequestMapping(value = "/news/type/{newsTypeId}", method = RequestMethod.GET)
+    public R searchNewsType(@PathVariable(name = "newsTypeId") int newsTypeId) {
+        NewsType newsType = new NewsType();
+        newsType.setTypeId(newsTypeId);
         return newsTypeService.searchArticle(newsType);
     }
 
@@ -126,8 +133,10 @@ public class InfoController {
      * =================================================================================================================
      */
 
-    @RequestMapping(value = "/notice", method = RequestMethod.GET)
-    public R searchNotice(@RequestBody Article article) {
+    @RequestMapping(value = "/notice/{noticeId}", method = RequestMethod.GET)
+    public R searchNotice(@PathVariable(name = "noticeId") int articleId) {
+        Article article = new Article();
+        article.setArticleId(articleId);
         return noticeService.searchArticle(article);
     }
 
@@ -142,8 +151,10 @@ public class InfoController {
      * =================================================================================================================
      */
 
-    @RequestMapping(value = "/professional", method = RequestMethod.GET)
-    public R searchProfession(@RequestBody ProfessionalIntroduction professionalIntroduction) {
+    @RequestMapping(value = "/professional/{professionId}", method = RequestMethod.GET)
+    public R searchProfession(@PathVariable(name = "professionId") int professionalIntroductionId) {
+        ProfessionalIntroduction professionalIntroduction = new ProfessionalIntroduction();
+        professionalIntroduction.setProfessionalId(professionalIntroductionId);
         return professionalService.searchArticle(professionalIntroduction);
     }
 

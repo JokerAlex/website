@@ -33,4 +33,14 @@ public class LoginController {
         return r;
     }
 
+    @RequestMapping("/logout")
+    public R logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            return R.isFail();
+        }
+        session.removeAttribute(session.getId()+"userData");
+        return R.isOk();
+    }
+
 }
