@@ -94,7 +94,21 @@ public class NewsTypeServiceImpl implements ArticleService<NewsType> {
 
     @Override
     public R searchArticle(NewsType newsType) {
-        return null;
+        if (newsType == null || newsType.getTypeId() == null) {
+            return R.isFail(new Exception("获取新闻分类失败"));
+        }
+
+        try {
+            NewsType newsTypeResult = newsTypeMapper.selectByPrimaryKey(newsType.getTypeId());
+            if (newsTypeResult == null) {
+                return R.isFail(new Exception("404 Not Found"));
+            }
+
+            return R.isOk().data(newsTypeResult);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取新闻分类失败"));
+        }
     }
 
     /**
@@ -121,7 +135,7 @@ public class NewsTypeServiceImpl implements ArticleService<NewsType> {
         PageInfo<NewsType> pageInfo = new PageInfo<>(newsTypeList);
 
         JSONObject data = new JSONObject();
-        data.put("data", data);
+        data.put("data", newsTypeList);
         data.put("pageInfo", pageInfo);
 
         return R.isOk().data(data);

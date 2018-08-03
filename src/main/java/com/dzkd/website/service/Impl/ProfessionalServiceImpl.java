@@ -123,7 +123,7 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
                 int updatePageViews = professionalIntroductionMapper.updateByPrimaryKeySelective(professional);
                 logger.info("ProfessionalIntroductionServiceImpl->addProfessional->updatePageViews" + updatePageViews);
 
-                return R.isOk();
+                return R.isOk().data(professional);
             }
         } catch (Exception e) {
             logger.catching(e);
