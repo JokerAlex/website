@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @RestController
 public class LoginController {
@@ -22,8 +24,9 @@ public class LoginController {
     }
 
     @RequestMapping("/login")
-    public R login(String userName, String password, HttpServletRequest request){
-        R r = loginService.login(userName, password);
+    public R login(@RequestBody Map<String, String> map, HttpServletRequest request){
+
+        R r = loginService.login(map.get("userName"), map.get("password"));
 
         if (r.getStatus() == 0) {
             JSONObject data =(JSONObject) r.getData();
