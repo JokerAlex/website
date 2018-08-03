@@ -118,7 +118,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admission", method = RequestMethod.GET)
-    public R showAllAdmissionInfo(int pageNum, int pageSize) {
+    public R showAllAdmissionInfo(Integer pageNum, Integer pageSize) {
         return admissionService.showAll(pageNum, pageSize);
     }
 
@@ -151,7 +151,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/department", method = RequestMethod.GET)
-    public R showAllDepartment(int pageNum, int pageSize) {
+    public R showAllDepartment(Integer pageNum, Integer pageSize) {
         return departmentService.showAll(pageNum, pageSize);
     }
 
@@ -184,7 +184,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/employ", method = RequestMethod.GET)
-    public R showAllEmployInfo(int pageNum, int pageSize) {
+    public R showAllEmployInfo(Integer pageNum, Integer pageSize) {
         return employInfoService.showAll(pageNum, pageSize);
     }
 
@@ -217,7 +217,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/news", method = RequestMethod.GET)
-    public R showAllNews(int pageNum, int pageSize) {
+    public R showAllNews(Integer pageNum, Integer pageSize) {
         return newsService.showAll(pageNum, pageSize);
     }
 
@@ -250,7 +250,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/news/type", method = RequestMethod.GET)
-    public R showAllNewsType(int pageNum, int pageSize) {
+    public R showAllNewsType(Integer pageNum, Integer pageSize) {
         return newsTypeService.showAll(pageNum, pageSize);
     }
 
@@ -283,7 +283,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/notice", method = RequestMethod.GET)
-    public R showAllNotice(int pageNum, int pageSize) {
+    public R showAllNotice(Integer pageNum, Integer pageSize) {
         return noticeService.showAll(pageNum, pageSize);
     }
 
@@ -316,7 +316,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/professional", method = RequestMethod.GET)
-    public R showAllProfession(int pageNum, int pageSize) {
+    public R showAllProfession(Integer pageNum, Integer pageSize) {
         return professionalService.showAll(pageNum, pageSize);
     }
 
@@ -332,7 +332,9 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/school", method = RequestMethod.GET)
-    public R searchSchool(@RequestBody Article article) {
+    public R searchSchool() {
+        Article article = new Article();
+        article.setArticleId(1);
         return schoolService.searchArticle(article);
     }
 

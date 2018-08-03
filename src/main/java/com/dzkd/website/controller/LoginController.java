@@ -7,6 +7,7 @@ import com.dzkd.website.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @RequestMapping("/login")
+    @RequestMapping(name = "/login", method = RequestMethod.POST)
     public R login(@RequestBody Map<String, String> map, HttpServletRequest request){
 
         R r = loginService.login(map.get("userName"), map.get("password"));
@@ -36,7 +37,7 @@ public class LoginController {
         return r;
     }
 
-    @RequestMapping("/logout")
+    @RequestMapping(name = "/logout", method = RequestMethod.DELETE)
     public R logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if (session == null) {
