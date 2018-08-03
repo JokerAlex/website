@@ -12,5 +12,5 @@ public interface ArticleService<T> {
 
     R searchArticle(T t);
 
-    R showAll(int pageNum, int pageSize);
+    R showAll(Integer pageNum, Integer pageSize);
 }
