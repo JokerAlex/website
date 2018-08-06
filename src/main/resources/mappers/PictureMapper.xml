@@ -5,7 +5,7 @@
     <constructor >
       <idArg column="picture_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="picture_name" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="picture_category" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="picture_category" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="acess_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
@@ -25,7 +25,7 @@
   <insert id="insert" parameterType="com.dzkd.website.pojo.Picture" >
     insert into Picture (picture_id, picture_name, picture_category, 
       acess_id)
-    values (#{pictureId,jdbcType=INTEGER}, #{pictureName,jdbcType=VARCHAR}, #{pictureCategory,jdbcType=VARCHAR}, 
+    values (#{pictureId,jdbcType=INTEGER}, #{pictureName,jdbcType=VARCHAR}, #{pictureCategory,jdbcType=INTEGER}, 
       #{acessId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.dzkd.website.pojo.Picture" >
@@ -52,7 +52,7 @@
         #{pictureName,jdbcType=VARCHAR},
       </if>
       <if test="pictureCategory != null" >
-        #{pictureCategory,jdbcType=VARCHAR},
+        #{pictureCategory,jdbcType=INTEGER},
       </if>
       <if test="acessId != null" >
         #{acessId,jdbcType=INTEGER},
@@ -66,7 +66,7 @@
         picture_name = #{pictureName,jdbcType=VARCHAR},
       </if>
       <if test="pictureCategory != null" >
-        picture_category = #{pictureCategory,jdbcType=VARCHAR},
+        picture_category = #{pictureCategory,jdbcType=INTEGER},
       </if>
       <if test="acessId != null" >
         acess_id = #{acessId,jdbcType=INTEGER},
@@ -77,7 +77,7 @@
   <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.Picture" >
     update Picture
     set picture_name = #{pictureName,jdbcType=VARCHAR},
-      picture_category = #{pictureCategory,jdbcType=VARCHAR},
+      picture_category = #{pictureCategory,jdbcType=INTEGER},
       acess_id = #{acessId,jdbcType=INTEGER}
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </update>

@@ -3,7 +3,6 @@ package com.dzkd.website.dao;
 import com.dzkd.website.pojo.Picture;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public interface PictureMapper {
     int deleteByPrimaryKey(Integer pictureId);

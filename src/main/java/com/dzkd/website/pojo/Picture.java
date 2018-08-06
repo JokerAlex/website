@@ -5,11 +5,11 @@ public class Picture {
 
     private String pictureName;
 
-    private String pictureCategory;
+    private Integer pictureCategory;
 
     private Integer acessId;
 
-    public Picture(Integer pictureId, String pictureName, String pictureCategory, Integer acessId) {
+    public Picture(Integer pictureId, String pictureName, Integer pictureCategory, Integer acessId) {
         this.pictureId = pictureId;
         this.pictureName = pictureName;
         this.pictureCategory = pictureCategory;
@@ -36,12 +36,12 @@ public class Picture {
         this.pictureName = pictureName == null ? null : pictureName.trim();
     }
 
-    public String getPictureCategory() {
+    public Integer getPictureCategory() {
         return pictureCategory;
     }
 
-    public void setPictureCategory(String pictureCategory) {
-        this.pictureCategory = pictureCategory == null ? null : pictureCategory.trim();
+    public void setPictureCategory(Integer pictureCategory) {
+        this.pictureCategory = pictureCategory;
     }
 
     public Integer getAcessId() {
