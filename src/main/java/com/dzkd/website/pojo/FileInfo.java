@@ -1,6 +1,6 @@
 package com.dzkd.website.pojo;
 
-public class File {
+public class FileInfo {
     private Integer fileId;
 
     private String fileName;
@@ -9,14 +9,14 @@ public class File {
 
     private Integer fileArticleId;
 
-    public File(Integer fileId, String fileName, Integer fileArticleCate, Integer fileArticleId) {
+    public FileInfo(Integer fileId, String fileName, Integer fileArticleCate, Integer fileArticleId) {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileArticleCate = fileArticleCate;
         this.fileArticleId = fileArticleId;
     }
 
-    public File() {
+    public FileInfo() {
         super();
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dzkd.website.dao.FileMapper" >
-  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.File" >
+<mapper namespace="com.dzkd.website.dao.FileInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.FileInfo" >
     <constructor >
       <idArg column="file_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="file_name" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -15,21 +15,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from File
+    from File_info
     where file_id = #{fileId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from File
+    delete from File_info
     where file_id = #{fileId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.dzkd.website.pojo.File" >
-    insert into File (file_id, file_name, file_article_cate, 
+  <insert id="insert" parameterType="com.dzkd.website.pojo.FileInfo" >
+    insert into File_info (file_id, file_name, file_article_cate, 
       file_article_id)
     values (#{fileId,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, #{fileArticleCate,jdbcType=INTEGER}, 
       #{fileArticleId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.File" >
-    insert into File
+  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.FileInfo" >
+    insert into File_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="fileId != null" >
         file_id,
@@ -59,8 +59,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.File" >
-    update File
+  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.FileInfo" >
+    update File_info
     <set >
       <if test="fileName != null" >
         file_name = #{fileName,jdbcType=VARCHAR},
@@ -74,8 +74,8 @@
     </set>
     where file_id = #{fileId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.File" >
-    update File
+  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.FileInfo" >
+    update File_info
     set file_name = #{fileName,jdbcType=VARCHAR},
       file_article_cate = #{fileArticleCate,jdbcType=INTEGER},
       file_article_id = #{fileArticleId,jdbcType=INTEGER}
