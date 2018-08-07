@@ -2,9 +2,12 @@ package com.dzkd.website.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.NewsMapper;
+import com.dzkd.website.dao.PictureMapper;
 import com.dzkd.website.pojo.News;
+import com.dzkd.website.pojo.Picture;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
+import com.dzkd.website.util.FileUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
@@ -21,10 +24,12 @@ public class NewsServiceImpl implements ArticleService<News> {
     private static final Logger logger = LogManager.getLogger(NewsServiceImpl.class);
 
     private NewsMapper newsMapper;
+    private PictureMapper pictureMapper;
 
     @Autowired
-    public NewsServiceImpl(NewsMapper newsMapper) {
+    public NewsServiceImpl(NewsMapper newsMapper, PictureMapper pictureMapper) {
         this.newsMapper = newsMapper;
+        this.pictureMapper = pictureMapper;
     }
 
     /**
@@ -98,6 +103,13 @@ public class NewsServiceImpl implements ArticleService<News> {
             int del = newsMapper.deleteByPrimaryKey(news.getNewsId());
             logger.info("NewsServiceImpl->del:" + del);
 
+            //删除新闻图片
+            List<Picture> pictureList = pictureMapper.selectByArticle(0,news.getNewsId());
+            FileUtil.delFile(pictureList,1);
+
+            int delPictures = pictureMapper.deleteBatch(pictureList);
+            logger.info("NewsServiceImpl->delPictures:" + delPictures);
+
             return R.isOk();
         } catch (Exception e) {
             logger.catching(e);
@@ -127,7 +139,13 @@ public class NewsServiceImpl implements ArticleService<News> {
             int updatePageViews = newsMapper.updateByPrimaryKeySelective(newsResult);
             logger.info("NewsServiceImpl->updatePageViews:" + updatePageViews);
 
-            return R.isOk().data(newsResult);
+            //获取图片信息
+            List<Picture> pictureList = pictureMapper.selectByArticle(0,news.getNewsId());
+            JSONObject data = new JSONObject();
+            data.put("newResult", newsResult);
+            data.put("pictures", pictureList);
+
+            return R.isOk().data(data);
         } catch (Exception e) {
             logger.catching(e);
             return R.isFail(new Exception("删除新闻失败"));

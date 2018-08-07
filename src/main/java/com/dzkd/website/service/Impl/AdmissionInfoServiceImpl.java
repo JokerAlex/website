@@ -2,10 +2,13 @@ package com.dzkd.website.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.AdmissionInfoMapper;
+import com.dzkd.website.dao.FileInfoMapper;
 import com.dzkd.website.pojo.AdmissionInfo;
 import com.dzkd.website.pojo.Article;
+import com.dzkd.website.pojo.FileInfo;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
+import com.dzkd.website.util.FileUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,10 +27,12 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
     private static final Logger logger = LogManager.getLogger(AdmissionInfoServiceImpl.class);
 
     private AdmissionInfoMapper admissionInfoMapper;
+    private FileInfoMapper fileInfoMapper;
 
     @Autowired
-    public AdmissionInfoServiceImpl(AdmissionInfoMapper admissionInfoMapper) {
+    public AdmissionInfoServiceImpl(AdmissionInfoMapper admissionInfoMapper, FileInfoMapper fileInfoMapper) {
         this.admissionInfoMapper = admissionInfoMapper;
+        this.fileInfoMapper = fileInfoMapper;
     }
 
     /**
@@ -97,12 +103,19 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
 
         try {
             int del = admissionInfoMapper.deleteByPrimaryKey(article.getArticleId());
-            logger.info("AdmissionInfoServiceImpl->add->delDepartment:" + del);
+            logger.info("AdmissionInfoServiceImpl->delAdmission:" + del);
+
+            //删除文章附带的文件
+            List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(0,article.getArticleId());
+            FileUtil.delFile(fileInfoList, 0);
+
+            int delFiles = fileInfoMapper.deleteBatch(fileInfoList);
+            logger.info("AdmissionInfoServiceImpl->delFiles:" + delFiles);
 
             return R.isOk();
         } catch (Exception e) {
             logger.catching(e);
-            return R.isFail(new Exception("删除招生信息失败"));
+            return R.isFail(e);
         }
     }
 
@@ -135,7 +148,13 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
                 int updatePageViews = admissionInfoMapper.updateByPrimaryKeySelective(admissionInfo);
                 logger.info("AdmissionInfoServiceImpl->updatePageViews:" + updatePageViews);
 
-                return R.isOk().data(articleResult);
+                //获取文件信息
+                List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(0,article.getArticleId());
+                JSONObject data = new JSONObject();
+                data.put("articleResult", articleResult);
+                data.put("files", fileInfoList);
+
+                return R.isOk().data(data);
             }
         } catch (Exception e) {
             logger.catching(e);
