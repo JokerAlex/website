@@ -105,10 +105,12 @@ public class NewsServiceImpl implements ArticleService<News> {
 
             //删除新闻图片
             List<Picture> pictureList = pictureMapper.selectByArticle(0,news.getNewsId());
-            FileUtil.delFile(pictureList,1);
+            if (pictureList.size() != 0) {
+                FileUtil.delFile(pictureList,1);
 
-            int delPictures = pictureMapper.deleteBatch(pictureList);
-            logger.info("NewsServiceImpl->delPictures:" + delPictures);
+                int delPictures = pictureMapper.deleteBatch(pictureList);
+                logger.info("NewsServiceImpl->delPictures:" + delPictures);
+            }
 
             return R.isOk();
         } catch (Exception e) {
@@ -148,7 +150,7 @@ public class NewsServiceImpl implements ArticleService<News> {
             return R.isOk().data(data);
         } catch (Exception e) {
             logger.catching(e);
-            return R.isFail(new Exception("删除新闻失败"));
+            return R.isFail(new Exception("获取新闻失败"));
         }
     }
 

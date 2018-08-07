@@ -13,7 +13,7 @@
     picture_id, picture_name, picture_category, acess_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from Picture
     where picture_id = #{pictureId,jdbcType=INTEGER}
@@ -23,7 +23,7 @@
     select
     <include refid="Base_Column_List" />
     from Picture
-    where picture_category = #{articleType} and picture_id = #{articleId}
+    where picture_category = #{articleCate} and acess_id = #{articleId}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from Picture
@@ -38,9 +38,9 @@
         </foreach>
     </delete>
   <insert id="insert" parameterType="com.dzkd.website.pojo.Picture" >
-    insert into Picture (picture_id, picture_name, picture_category, 
+    insert into Picture (picture_id, picture_name, picture_category,
       acess_id)
-    values (#{pictureId,jdbcType=INTEGER}, #{pictureName,jdbcType=VARCHAR}, #{pictureCategory,jdbcType=INTEGER}, 
+    values (#{pictureId,jdbcType=INTEGER}, #{pictureName,jdbcType=VARCHAR}, #{pictureCategory,jdbcType=INTEGER},
       #{acessId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.dzkd.website.pojo.Picture" >

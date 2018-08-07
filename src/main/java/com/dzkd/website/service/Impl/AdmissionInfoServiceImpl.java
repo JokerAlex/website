@@ -107,10 +107,12 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
 
             //删除文章附带的文件
             List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(0,article.getArticleId());
-            FileUtil.delFile(fileInfoList, 0);
+            if (fileInfoList.size() != 0) {
+                FileUtil.delFile(fileInfoList, 0);
 
-            int delFiles = fileInfoMapper.deleteBatch(fileInfoList);
-            logger.info("AdmissionInfoServiceImpl->delFiles:" + delFiles);
+                int delFiles = fileInfoMapper.deleteBatch(fileInfoList);
+                logger.info("AdmissionInfoServiceImpl->delFiles:" + delFiles);
+            }
 
             return R.isOk();
         } catch (Exception e) {
