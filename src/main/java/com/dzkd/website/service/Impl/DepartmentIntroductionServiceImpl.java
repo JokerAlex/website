@@ -2,8 +2,10 @@ package com.dzkd.website.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.DepartmentIntroductionMapper;
+import com.dzkd.website.dao.ProfessionalIntroductionMapper;
 import com.dzkd.website.pojo.Article;
 import com.dzkd.website.pojo.DepartmentIntroduction;
+import com.dzkd.website.pojo.ProfessionalIntroduction;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
 import com.github.pagehelper.PageHelper;
@@ -20,14 +22,17 @@ import java.util.List;
 @Service
 public class DepartmentIntroductionServiceImpl implements ArticleService<Article> {
 
-    private DepartmentIntroductionMapper departmentIntroductionMapper;
-
     private static final Logger logger = LogManager.getLogger(DepartmentIntroductionServiceImpl.class);
 
+    private DepartmentIntroductionMapper departmentIntroductionMapper;
+    private ProfessionalIntroductionMapper professionalIntroductionMapper;
+
     @Autowired
-    public DepartmentIntroductionServiceImpl(DepartmentIntroductionMapper departmentIntroductionMapper) {
+    public DepartmentIntroductionServiceImpl(DepartmentIntroductionMapper departmentIntroductionMapper, ProfessionalIntroductionMapper professionalIntroductionMapper) {
         this.departmentIntroductionMapper = departmentIntroductionMapper;
+        this.professionalIntroductionMapper = professionalIntroductionMapper;
     }
+
 
     /**
      * 添加院系简介
@@ -48,7 +53,7 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
 
             DepartmentIntroduction departmentIntroduction = transform(article);
             int insertDepartment = departmentIntroductionMapper.insertSelective(departmentIntroduction);
-            logger.info("DepartmentIntroductionServiceImpl->add->insertDepartment:" + insertDepartment);
+            logger.info("DepartmentIntroductionServiceImpl->insertDepartment:" + insertDepartment);
 
             return R.isOk();
         } catch (Exception e) {
@@ -75,7 +80,7 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
 
             DepartmentIntroduction departmentIntroduction = transform(article);
             int updateDepartment = departmentIntroductionMapper.updateByPrimaryKeySelective(departmentIntroduction);
-            logger.info("DepartmentIntroductionServiceImpl->add->updateDepartment:" + updateDepartment);
+            logger.info("DepartmentIntroductionServiceImpl->updateDepartment:" + updateDepartment);
 
             return R.isOk();
         } catch (Exception e) {
@@ -96,8 +101,12 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
         }
 
         try {
+            //删除院系下的学院
+            int delProfession = professionalIntroductionMapper.deleteByDepartmentId(article.getArticleId());
+            logger.info("DepartmentIntroductionServiceImpl->delProfession:" + delProfession);
+
             int delDepartment = departmentIntroductionMapper.deleteByPrimaryKey(article.getArticleId());
-            logger.info("DepartmentIntroductionServiceImpl->add->delDepartment:" + delDepartment);
+            logger.info("DepartmentIntroductionServiceImpl->delDepartment:" + delDepartment);
 
             return R.isOk();
         } catch (Exception e) {
@@ -133,7 +142,7 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
                 //更新访问量
                 departmentIntroduction.setDepartmentAcessNumber(departmentIntroduction.getDepartmentAcessNumber() + 1);
                 int updatePageViews = departmentIntroductionMapper.updateByPrimaryKeySelective(departmentIntroduction);
-                logger.info("DepartmentIntroductionServiceImpl->add->updatePageViews:" + updatePageViews);
+                logger.info("DepartmentIntroductionServiceImpl->updatePageViews:" + updatePageViews);
 
                 return R.isOk().data(articleResult);
             }

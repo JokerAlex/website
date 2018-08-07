@@ -9,6 +9,8 @@ import java.util.List;
 public interface ProfessionalIntroductionMapper {
     int deleteByPrimaryKey(Integer professionalId);
 
+    int deleteByDepartmentId(Integer DepartmentId);
+
     int insert(ProfessionalIntroduction record);
 
     int insertSelective(ProfessionalIntroduction record);

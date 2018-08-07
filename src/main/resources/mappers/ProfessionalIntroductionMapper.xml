@@ -52,6 +52,12 @@
         from Professional_introduction
         where professional_id = #{professionalId,jdbcType=INTEGER}
     </delete>
+    <!--按照学院删除-->
+    <delete id="deleteByDepartmentId" parameterType="java.lang.Integer">
+        delete
+        from Professional_introduction
+        where Department_introduction_department_id = #{DepartmentId}
+    </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.ProfessionalIntroduction">
         insert into Professional_introduction (professional_id,
                                                professional_title,
