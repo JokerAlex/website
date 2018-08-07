@@ -18,10 +18,25 @@
     from Picture
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </select>
+  <!--按照文章获取图片-->
+  <select id="selectByArticle" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from Picture
+    where picture_category = #{articleType} and picture_id = #{articleId}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from Picture
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List" >
+        delete from Picture
+        where picture_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.pictureId}
+        </foreach>
+    </delete>
   <insert id="insert" parameterType="com.dzkd.website.pojo.Picture" >
     insert into Picture (picture_id, picture_name, picture_category, 
       acess_id)
