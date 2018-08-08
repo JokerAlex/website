@@ -32,12 +32,12 @@ public class LoginServiceImpl implements LoginService {
     public R login(String userName, String password) {
 
         UserInfo userInfo = userInfoMapper.selectByUserName(userName, password);
-        Student studentInfo = studentMapper.selectByStuId(userName, password);
+        Student studentInfo = studentMapper.selectByStuIdAndPass(userName, password);
         if (userInfo == null && studentInfo == null) {
             return R.isFail(new Exception("用户名或密码错误"));
         } else {
             UserInfo userLoginTime = new UserInfo();
-            if (studentInfo != null){
+            if (studentInfo != null) {
                 userLoginTime.setUserInfoId(studentInfo.getUserUserInfoId());
             } else {
                 userLoginTime.setUserInfoId(userInfo.getUserInfoId());
@@ -45,9 +45,9 @@ public class LoginServiceImpl implements LoginService {
             userLoginTime.setRegTime(new Date().toString());
             userInfoMapper.updateByPrimaryKeySelective(userLoginTime);
 
-            Student student = studentMapper.selectByUserName(userName, password) == null ?
-                    studentMapper.selectByStuId(userName, password) :
-                    studentMapper.selectByUserName(userName, password);
+            Student student = studentMapper.selectByUserNameAndPass(userName, password) == null ?
+                    studentMapper.selectByStuIdAndPass(userName, password) :
+                    studentMapper.selectByUserNameAndPass(userName, password);
             AdminInfo adminInfo = adminInfoMapper.selectByUserName(userName, password);
 
             JSONObject data = new JSONObject();
