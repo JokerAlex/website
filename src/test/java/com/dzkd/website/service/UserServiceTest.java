@@ -23,13 +23,6 @@ public class UserServiceTest {
         System.out.println(userService.getAllAdminInfo(1,5).toString());
     }
 
-    @Test
-    public void insertUser(){
-        UserInfo userInfo = new UserInfo();
-        userInfo.setRealName("haha");
-        int result = userService.addUserInfo(userInfo);
-        System.out.println("result:" + result + "\n主键:" + userInfo.getUserInfoId());
-    }
 
     @Test
     public void addAdmin(){

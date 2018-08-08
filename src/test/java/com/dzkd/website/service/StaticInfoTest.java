@@ -29,9 +29,7 @@ public class StaticInfoTest {
 
     @Test
     public void showSchoolIntroduction() {
-        Article article = new Article();
-        article.setArticleId(1);
-        System.out.println(schoolService.searchArticle(article).toString());
+        System.out.println(schoolService.searchArticle(1).toString());
     }
 
     @Test
@@ -56,20 +54,16 @@ public class StaticInfoTest {
 
     @Test
     public void searchDepartment() {
-        Article article = new Article();
-        article.setArticleId(3);
-        System.out.println(departmentService.searchArticle(article).toString());
+        System.out.println(departmentService.searchArticle(3).toString());
     }
 
     @Test
     public void delDepartment() {
-        Article article = new Article();
-        article.setArticleId(3);
-        System.out.println(departmentService.delArticle(article).toString());
+        System.out.println(departmentService.delArticle(3).toString());
     }
 
     @Test
     public void showAllDepartment(){
-        System.out.println(departmentService.showAll(1,5));
+        System.out.println(departmentService.showAll(1,5, null));
     }
 }
