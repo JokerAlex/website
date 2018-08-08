@@ -7,6 +7,8 @@ import com.dzkd.website.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/admin")
@@ -49,6 +51,11 @@ public class AdminController {
      * =================================================================================================================
      */
 
+    @RequestMapping(value = "/stu/{stuId}", method = RequestMethod.GET)
+    public R getStudent(@PathVariable(name = "stuId") Integer stuId) {
+        return userService.getStudent(stuId);
+    }
+
     @RequestMapping(value = "/stu", method = RequestMethod.GET)
     public R showStudents(int pageNum, int pageSize) {
         return userService.getAllStudent(pageNum, pageSize);
@@ -69,6 +76,11 @@ public class AdminController {
      *                                                   管理员信息管理
      * =================================================================================================================
      */
+
+    @RequestMapping(value = "/admin/{adminId}", method = RequestMethod.GET)
+    public R getAdmin(@PathVariable(name = "adminId") Integer adminId) {
+        return userService.getAdminInfo(adminId);
+    }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public R showAdmins(int pageNum, int pageSize) {
@@ -105,16 +117,19 @@ public class AdminController {
         return admissionService.updateArticle(article);
     }
 
+    @RequestMapping(value = "/admission/{articleId}", method = RequestMethod.DELETE)
+    public R delAdmissionInfo(@PathVariable(name = "articleId") Integer articleId) {
+        return admissionService.delArticle(articleId);
+    }
+
     @RequestMapping(value = "/admission", method = RequestMethod.DELETE)
-    public R delAdmissionInfo(@RequestBody Article article) {
-        return admissionService.delArticle(article);
+    public R delBatchAdmissionInfo(@RequestBody List<Article> articleList) {
+        return admissionService.delBatch(articleList);
     }
 
     @RequestMapping(value = "/admission/{articleId}", method = RequestMethod.GET)
-    public R searchAdmissionInfo(@PathVariable(name = "articleId") int articleId) {
-        Article article = new Article();
-        article.setArticleId(articleId);
-        return admissionService.searchArticle(article);
+    public R searchAdmissionInfo(@PathVariable(name = "articleId") Integer articleId) {
+        return admissionService.searchArticle(articleId);
     }
 
     @RequestMapping(value = "/admission", method = RequestMethod.GET)
@@ -138,16 +153,19 @@ public class AdminController {
         return departmentService.updateArticle(article);
     }
 
-    @RequestMapping(value = "/department", method = RequestMethod.DELETE)
-    public R delDepartment(@RequestBody Article article) {
-        return departmentService.delArticle(article);
+    @RequestMapping(value = "/department/{articleId}", method = RequestMethod.DELETE)
+    public R delDepartment(@PathVariable(name = "articleId") Integer articleId) {
+        return departmentService.delArticle(articleId);
+    }
+
+    @RequestMapping(value = "/department/", method = RequestMethod.DELETE)
+    public R delBatchDepartment(@RequestBody List<Article> articleList) {
+        return departmentService.delBatch(articleList);
     }
 
     @RequestMapping(value = "/department/{articleId}", method = RequestMethod.GET)
-    public R searchDepartment(@PathVariable(name = "articleId") int articleId) {
-        Article article = new Article();
-        article.setArticleId(articleId);
-        return departmentService.searchArticle(article);
+    public R searchDepartment(@PathVariable(name = "articleId") Integer articleId) {
+        return departmentService.searchArticle(articleId);
     }
 
     @RequestMapping(value = "/department", method = RequestMethod.GET)
@@ -171,16 +189,19 @@ public class AdminController {
         return employInfoService.updateArticle(article);
     }
 
+    @RequestMapping(value = "/employ/{articleId}", method = RequestMethod.DELETE)
+    public R delEmployInfo(@PathVariable(name = "articleId") Integer articleId) {
+        return employInfoService.delArticle(articleId);
+    }
+
     @RequestMapping(value = "/employ", method = RequestMethod.DELETE)
-    public R delEmployInfo(@RequestBody Article article) {
-        return employInfoService.delArticle(article);
+    public R delBatchEmployInfo(@RequestBody List<Article> articleList) {
+        return employInfoService.delBatch(articleList);
     }
 
     @RequestMapping(value = "/employ/{articleId}", method = RequestMethod.GET)
-    public R searchEmployInfo(@PathVariable(name = "articleId") int articleId) {
-        Article article = new Article();
-        article.setArticleId(articleId);
-        return employInfoService.searchArticle(article);
+    public R searchEmployInfo(@PathVariable(name = "articleId") Integer articleId) {
+        return employInfoService.searchArticle(articleId);
     }
 
     @RequestMapping(value = "/employ", method = RequestMethod.GET)
@@ -204,16 +225,19 @@ public class AdminController {
         return newsService.updateArticle(news);
     }
 
+    @RequestMapping(value = "/news/{newsId}", method = RequestMethod.DELETE)
+    public R delNews(@PathVariable(name = "newsId") Integer newsId) {
+        return newsService.delArticle(newsId);
+    }
+
     @RequestMapping(value = "/news", method = RequestMethod.DELETE)
-    public R delNews(@RequestBody News news) {
-        return newsService.delArticle(news);
+    public R delBatchNews(@RequestBody List<News> newsList) {
+        return newsService.delBatch(newsList);
     }
 
     @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
-    public R searchNews(@PathVariable(name = "newsId") int newsId) {
-        News news = new News();
-        news.setNewsId(newsId);
-        return newsService.searchArticle(news);
+    public R searchNews(@PathVariable(name = "newsId") Integer newsId) {
+        return newsService.searchArticle(newsId);
     }
 
     @RequestMapping(value = "/news", method = RequestMethod.GET)
@@ -237,16 +261,19 @@ public class AdminController {
         return newsTypeService.updateArticle(newsType);
     }
 
+    @RequestMapping(value = "/news/type/{newsTypeId}", method = RequestMethod.DELETE)
+    public R delNewsType(@PathVariable(name = "newsTypeId") Integer newsTypeId) {
+        return newsTypeService.delArticle(newsTypeId);
+    }
+
     @RequestMapping(value = "/news/type", method = RequestMethod.DELETE)
-    public R delNewsType(@RequestBody NewsType newsType) {
-        return newsTypeService.delArticle(newsType);
+    public R delBatchNewsType(@RequestBody List<NewsType> newsTypeList) {
+        return newsTypeService.delBatch(newsTypeList);
     }
 
     @RequestMapping(value = "/news/type/{newsTypeId}", method = RequestMethod.GET)
-    public R searchNewsType(@PathVariable(name = "newsTypeId") int newsTypeId) {
-        NewsType newsType = new NewsType();
-        newsType.setTypeId(newsTypeId);
-        return newsTypeService.searchArticle(newsType);
+    public R searchNewsType(@PathVariable(name = "newsTypeId") Integer newsTypeId) {
+        return newsTypeService.searchArticle(newsTypeId);
     }
 
     @RequestMapping(value = "/news/type", method = RequestMethod.GET)
@@ -270,16 +297,19 @@ public class AdminController {
         return noticeService.updateArticle(article);
     }
 
+    @RequestMapping(value = "/notice/{noticeId}", method = RequestMethod.DELETE)
+    public R delNotice(@PathVariable(name = "noticeId") Integer articleId) {
+        return noticeService.delArticle(articleId);
+    }
+
     @RequestMapping(value = "/notice", method = RequestMethod.DELETE)
-    public R delNotice(@RequestBody Article article) {
-        return noticeService.delArticle(article);
+    public R delBatchNotice(@RequestBody List<Article> articleList) {
+        return noticeService.delBatch(articleList);
     }
 
     @RequestMapping(value = "/notice/{noticeId}", method = RequestMethod.GET)
-    public R searchNotice(@PathVariable(name = "noticeId") int articleId) {
-        Article article = new Article();
-        article.setArticleId(articleId);
-        return noticeService.searchArticle(article);
+    public R searchNotice(@PathVariable(name = "noticeId") Integer articleId) {
+        return noticeService.searchArticle(articleId);
     }
 
     @RequestMapping(value = "/notice", method = RequestMethod.GET)
@@ -303,16 +333,19 @@ public class AdminController {
         return professionalService.updateArticle(professionalIntroduction);
     }
 
-    @RequestMapping(value = "/professional", method = RequestMethod.DELETE)
-    public R delProfession(@RequestBody ProfessionalIntroduction professionalIntroduction) {
-        return professionalService.delArticle(professionalIntroduction);
+    @RequestMapping(value = "/professional/{professionId}", method = RequestMethod.DELETE)
+    public R delProfession(@PathVariable(name = "professionId") Integer professionalIntroductionId) {
+        return professionalService.delArticle(professionalIntroductionId);
+    }
+
+    @RequestMapping(value = "/professional/{professionId}", method = RequestMethod.DELETE)
+    public R delBatchProfession(@RequestBody List<ProfessionalIntroduction> professionalIntroductionList) {
+        return professionalService.delBatch(professionalIntroductionList);
     }
 
     @RequestMapping(value = "/professional/{professionId}", method = RequestMethod.GET)
-    public R searchProfession(@PathVariable(name = "professionId") int professionalIntroductionId) {
-        ProfessionalIntroduction professionalIntroduction = new ProfessionalIntroduction();
-        professionalIntroduction.setProfessionalId(professionalIntroductionId);
-        return professionalService.searchArticle(professionalIntroduction);
+    public R searchProfession(@PathVariable(name = "professionId") Integer professionalIntroductionId) {
+        return professionalService.searchArticle(professionalIntroductionId);
     }
 
     @RequestMapping(value = "/professional", method = RequestMethod.GET)
@@ -333,9 +366,7 @@ public class AdminController {
 
     @RequestMapping(value = "/school", method = RequestMethod.GET)
     public R searchSchool() {
-        Article article = new Article();
-        article.setArticleId(1);
-        return schoolService.searchArticle(article);
+        return schoolService.searchArticle(1);
     }
 
 
