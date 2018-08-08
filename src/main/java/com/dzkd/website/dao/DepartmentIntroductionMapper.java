@@ -9,6 +9,8 @@ import java.util.List;
 public interface DepartmentIntroductionMapper {
     int deleteByPrimaryKey(Integer departmentId);
 
+    int deleteBatch(List<DepartmentIntroduction> departmentIntroductionList);
+
     int insert(DepartmentIntroduction record);
 
     int insertSelective(DepartmentIntroduction record);

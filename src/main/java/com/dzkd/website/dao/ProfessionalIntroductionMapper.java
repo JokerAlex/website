@@ -11,6 +11,8 @@ public interface ProfessionalIntroductionMapper {
 
     int deleteByDepartmentId(Integer DepartmentId);
 
+    int deleteBatch(List<ProfessionalIntroduction> professionalIntroductionList);
+
     int insert(ProfessionalIntroduction record);
 
     int insertSelective(ProfessionalIntroduction record);

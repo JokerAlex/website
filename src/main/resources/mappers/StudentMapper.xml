@@ -44,12 +44,23 @@
         where stu_id = #{stuId,jdbcType=VARCHAR}
     </select>
 
-    <!---->
-    <select id="selectByForeignKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <!--结合userInfo表,学号-->
+    <select id="selectByStuId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
-        <include refid="Base_Column_List"/>
-        from Student
-        where User_user_info_id = #{userId}
+               s.stu_id,
+               s.stu_college,
+               s.stu_major,
+               s.stu_grade,
+               s.User_user_info_id,
+               u.user_info_id,
+               u.real_name,
+               u.address,
+               u.telephone,
+               u.email,
+               u.user_name,
+               u.reg_time
+        from Student s, User_info u
+        where User_user_info_id = user_info_id and stu_id = #{stuId}
     </select>
     <!--结合userInfo表-->
     <select id="selectAll" resultMap="allResultMap">
@@ -71,7 +82,7 @@
     </select>
 
     <!--结合userInfo表，用户名、密码-->
-    <select id="selectByUserName" resultMap="allResultMap">
+    <select id="selectByUserNameAndPass" resultMap="allResultMap">
         select
                s.stu_id,
                s.stu_college,
@@ -89,7 +100,7 @@
         where s.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password}
     </select>
     <!--结合userInfo表，学号、密码-->
-    <select id="selectByStuId" resultMap="allResultMap">
+    <select id="selectByStuIdAndPass" resultMap="allResultMap">
         select
                s.stu_id,
                s.stu_college,

@@ -42,6 +42,15 @@
         from Employ_info
         where emp_info_id = #{empInfoId,jdbcType=INTEGER}
     </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete
+        from Employ_info
+        where emp_info_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.empInfoId}
+        </foreach>
+    </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.EmployInfo">
         insert into Employ_info (emp_info_id,
                                  emp_info_title,

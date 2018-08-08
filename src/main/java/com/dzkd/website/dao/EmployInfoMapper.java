@@ -9,6 +9,8 @@ import java.util.List;
 public interface EmployInfoMapper {
     int deleteByPrimaryKey(Integer empInfoId);
 
+    int deleteBatch(List<EmployInfo> employInfoList);
+
     int insert(EmployInfo record);
 
     int insertSelective(EmployInfo record);

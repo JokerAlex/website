@@ -58,6 +58,15 @@
         from Professional_introduction
         where Department_introduction_department_id = #{DepartmentId}
     </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete
+        from Professional_introduction
+        where professional_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.professionalId}
+        </foreach>
+    </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.ProfessionalIntroduction">
         insert into Professional_introduction (professional_id,
                                                professional_title,

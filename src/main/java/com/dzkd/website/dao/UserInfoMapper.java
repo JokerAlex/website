@@ -4,9 +4,13 @@ import com.dzkd.website.pojo.UserInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserInfoMapper {
     int deleteByPrimaryKey(Integer userInfoId);
+
+    int deleteBatch(List<UserInfo> userInfoList);
 
     int insert(UserInfo record);
 

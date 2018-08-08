@@ -9,6 +9,8 @@ import java.util.List;
 public interface NewsTypeMapper {
     int deleteByPrimaryKey(Integer typeId);
 
+    int deleteBatch(List<NewsType> newsTypeList);
+
     int insert(NewsType record);
 
     int insertSelective(NewsType record);

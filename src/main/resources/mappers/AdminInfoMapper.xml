@@ -39,15 +39,7 @@
         from Admin_info
         where admin_id = #{adminId,jdbcType=INTEGER}
     </select>
-    <!---->
-    <select id="selectByForeignKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from Admin_info
-        where User_user_info_id = #{userId}
-    </select>
-
-    <!--结合userInfo-->
+    <!--结合userInfo，查询全部-->
     <select id="selectAll" resultMap="allResultMap">
         select a.admin_id,
                a.admin_block_id,
@@ -64,7 +56,7 @@
         where a.User_user_info_id = u.user_info_id
     </select>
 
-    <!--结合userInfo-->
+    <!--结合userInfo，按照用户名-->
     <select id="selectByUserName" resultMap="allResultMap">
         select a.admin_id,
                a.admin_block_id,
@@ -78,13 +70,41 @@
                u.reg_time
         from Admin_info a,
              User_info u
-        where a.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password}
+        where a.User_user_info_id = u.user_info_id
+          and u.user_name = #{userName}
+          and u.user_password = #{password}
+    </select>
+
+    <!--结合userInfo,按照管理员编号-->
+    <select id="selectByAdminId" resultMap="allResultMap">
+        select a.admin_id,
+               a.admin_block_id,
+               a.User_user_info_id,
+               u.user_info_id,
+               u.real_name,
+               u.address,
+               u.telephone,
+               u.email,
+               u.user_name,
+               u.reg_time
+        from Admin_info a,
+             User_info u
+        where a.User_user_info_id = u.user_info_id and admin_id = #{adminId}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from Admin_info
         where admin_id = #{adminId,jdbcType=INTEGER}
+    </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete
+        from Admin_info
+        where admin_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.adminId}
+        </foreach>
     </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.AdminInfo">
         insert into Admin_info (admin_id, admin_block_id, User_user_info_id)

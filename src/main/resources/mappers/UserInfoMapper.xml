@@ -40,6 +40,14 @@
         delete from User_info
         where user_info_id = #{userInfoId,jdbcType=INTEGER}
     </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from User_info
+        where user_info_id in
+        <foreach collection="list" open="(" close=")" separator=",">
+            #{item.userInfoId}
+        </foreach>
+    </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.UserInfo">
         insert into User_info (user_info_id, real_name, address,
                                telephone, email, user_name,

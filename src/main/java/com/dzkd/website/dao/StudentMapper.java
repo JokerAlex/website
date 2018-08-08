@@ -17,11 +17,11 @@ public interface StudentMapper {
 
     Student selectByPrimaryKey(String stuId);
 
-    Student selectByForeignKey(Integer userId);
+    Student selectByStuId(Integer stuId);
 
-    Student selectByUserName(@Param("userName") String userName, @Param("password") String password);
+    Student selectByUserNameAndPass(@Param("userName") String userName, @Param("password") String password);
 
-    Student selectByStuId(@Param("stuId") String stuId, @Param("password") String password);
+    Student selectByStuIdAndPass(@Param("stuId") String stuId, @Param("password") String password);
 
     List<Student> selectAll();
 

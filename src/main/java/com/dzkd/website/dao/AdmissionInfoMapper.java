@@ -9,6 +9,8 @@ import java.util.List;
 public interface AdmissionInfoMapper {
     int deleteByPrimaryKey(Integer admInfoId);
 
+    int deleteBatch(List<AdmissionInfo> admissionInfoList);
+
     int insert(AdmissionInfo record);
 
     int insertSelective(AdmissionInfo record);

@@ -1,127 +1,143 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dzkd.website.dao.DepartmentIntroductionMapper" >
-  <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.DepartmentIntroduction" >
-    <constructor >
-      <idArg column="department_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="department_title" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="department_update_time" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="department_content" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="department_acess_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-    </constructor>
-  </resultMap>
-
-    <resultMap id="allResultMap" type="com.dzkd.website.pojo.DepartmentIntroduction" >
-        <constructor >
-            <idArg column="department_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-            <arg column="department_title" jdbcType="VARCHAR" javaType="java.lang.String" />
-            <arg column="department_update_time" jdbcType="VARCHAR" javaType="java.lang.String" />
-            <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+<mapper namespace="com.dzkd.website.dao.DepartmentIntroductionMapper">
+    <resultMap id="BaseResultMap" type="com.dzkd.website.pojo.DepartmentIntroduction">
+        <constructor>
+            <idArg column="department_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="department_title" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="department_update_time" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="department_content" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="department_acess_number" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         </constructor>
     </resultMap>
 
-  <sql id="Base_Column_List" >
-    department_id, department_title, department_update_time, department_content, department_acess_number, 
-    Admin_admin_id
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from Department_introduction
-    where department_id = #{departmentId,jdbcType=INTEGER}
-  </select>
+    <resultMap id="allResultMap" type="com.dzkd.website.pojo.DepartmentIntroduction">
+        <constructor>
+            <idArg column="department_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="department_title" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="department_update_time" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="Admin_admin_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+    </resultMap>
 
-  <!--获取所有信息-->
-  <select id="selectAll" resultMap="allResultMap">
-    select department_id, department_title, department_update_time, Admin_admin_id
-    from Department_introduction
-    order by department_update_time
-  </select>
+    <sql id="Base_Column_List">
+        department_id, department_title, department_update_time, department_content, department_acess_number,
+        Admin_admin_id
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from Department_introduction
+        where department_id = #{departmentId,jdbcType=INTEGER}
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from Department_introduction
-    where department_id = #{departmentId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.dzkd.website.pojo.DepartmentIntroduction" >
-    insert into Department_introduction (department_id, department_title, department_update_time, 
-      department_content, department_acess_number, 
-      Admin_admin_id)
-    values (#{departmentId,jdbcType=INTEGER}, #{departmentTitle,jdbcType=VARCHAR}, #{departmentUpdateTime,jdbcType=VARCHAR}, 
-      #{departmentContent,jdbcType=VARCHAR}, #{departmentAcessNumber,jdbcType=INTEGER}, 
-      #{adminAdminId,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" parameterType="com.dzkd.website.pojo.DepartmentIntroduction" >
-    insert into Department_introduction
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="departmentId != null" >
-        department_id,
-      </if>
-      <if test="departmentTitle != null" >
-        department_title,
-      </if>
-      <if test="departmentUpdateTime != null" >
-        department_update_time,
-      </if>
-      <if test="departmentContent != null" >
-        department_content,
-      </if>
-      <if test="departmentAcessNumber != null" >
-        department_acess_number,
-      </if>
-      <if test="adminAdminId != null" >
-        Admin_admin_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="departmentId != null" >
-        #{departmentId,jdbcType=INTEGER},
-      </if>
-      <if test="departmentTitle != null" >
-        #{departmentTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentUpdateTime != null" >
-        #{departmentUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentContent != null" >
-        #{departmentContent,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentAcessNumber != null" >
-        #{departmentAcessNumber,jdbcType=INTEGER},
-      </if>
-      <if test="adminAdminId != null" >
-        #{adminAdminId,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.DepartmentIntroduction" >
-    update Department_introduction
-    <set >
-      <if test="departmentTitle != null" >
-        department_title = #{departmentTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentUpdateTime != null" >
-        department_update_time = #{departmentUpdateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentContent != null" >
-        department_content = #{departmentContent,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentAcessNumber != null" >
-        department_acess_number = #{departmentAcessNumber,jdbcType=INTEGER},
-      </if>
-      <if test="adminAdminId != null" >
-        Admin_admin_id = #{adminAdminId,jdbcType=INTEGER},
-      </if>
-    </set>
-    where department_id = #{departmentId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.DepartmentIntroduction" >
-    update Department_introduction
-    set department_title = #{departmentTitle,jdbcType=VARCHAR},
-      department_update_time = #{departmentUpdateTime,jdbcType=VARCHAR},
-      department_content = #{departmentContent,jdbcType=VARCHAR},
-      department_acess_number = #{departmentAcessNumber,jdbcType=INTEGER},
-      Admin_admin_id = #{adminAdminId,jdbcType=INTEGER}
-    where department_id = #{departmentId,jdbcType=INTEGER}
-  </update>
+    <!--获取所有信息-->
+    <select id="selectAll" resultMap="allResultMap">
+        select department_id, department_title, department_update_time, Admin_admin_id
+        from Department_introduction
+        order by department_update_time
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from Department_introduction
+        where department_id = #{departmentId,jdbcType=INTEGER}
+    </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete
+        from Department_introduction
+        where department_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.departmentId}
+        </foreach>
+    </delete>
+    <insert id="insert" parameterType="com.dzkd.website.pojo.DepartmentIntroduction">
+        insert into Department_introduction (department_id,
+                                             department_title,
+                                             department_update_time,
+                                             department_content,
+                                             department_acess_number,
+                                             Admin_admin_id)
+        values (#{departmentId,jdbcType=INTEGER},
+                #{departmentTitle,jdbcType=VARCHAR},
+                #{departmentUpdateTime,jdbcType=VARCHAR},
+                #{departmentContent,jdbcType=VARCHAR},
+                #{departmentAcessNumber,jdbcType=INTEGER},
+                #{adminAdminId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.dzkd.website.pojo.DepartmentIntroduction">
+        insert into Department_introduction
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="departmentId != null">
+                department_id,
+            </if>
+            <if test="departmentTitle != null">
+                department_title,
+            </if>
+            <if test="departmentUpdateTime != null">
+                department_update_time,
+            </if>
+            <if test="departmentContent != null">
+                department_content,
+            </if>
+            <if test="departmentAcessNumber != null">
+                department_acess_number,
+            </if>
+            <if test="adminAdminId != null">
+                Admin_admin_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="departmentId != null">
+                #{departmentId,jdbcType=INTEGER},
+            </if>
+            <if test="departmentTitle != null">
+                #{departmentTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentUpdateTime != null">
+                #{departmentUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentContent != null">
+                #{departmentContent,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentAcessNumber != null">
+                #{departmentAcessNumber,jdbcType=INTEGER},
+            </if>
+            <if test="adminAdminId != null">
+                #{adminAdminId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.dzkd.website.pojo.DepartmentIntroduction">
+        update Department_introduction
+        <set>
+            <if test="departmentTitle != null">
+                department_title = #{departmentTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentUpdateTime != null">
+                department_update_time = #{departmentUpdateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentContent != null">
+                department_content = #{departmentContent,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentAcessNumber != null">
+                department_acess_number = #{departmentAcessNumber,jdbcType=INTEGER},
+            </if>
+            <if test="adminAdminId != null">
+                Admin_admin_id = #{adminAdminId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where department_id = #{departmentId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.dzkd.website.pojo.DepartmentIntroduction">
+        update Department_introduction
+        set department_title        = #{departmentTitle,jdbcType=VARCHAR},
+            department_update_time  = #{departmentUpdateTime,jdbcType=VARCHAR},
+            department_content      = #{departmentContent,jdbcType=VARCHAR},
+            department_acess_number = #{departmentAcessNumber,jdbcType=INTEGER},
+            Admin_admin_id          = #{adminAdminId,jdbcType=INTEGER}
+        where department_id = #{departmentId,jdbcType=INTEGER}
+    </update>
 </mapper>

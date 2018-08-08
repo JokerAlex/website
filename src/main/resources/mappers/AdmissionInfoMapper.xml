@@ -43,6 +43,15 @@
         from Admission_info
         where adm_info_id = #{admInfoId,jdbcType=INTEGER}
     </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete
+        from Admission_info
+        where adm_info_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.admInfoId}
+        </foreach>
+    </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.AdmissionInfo">
         insert into Admission_info (adm_info_id,
                                     adm_info_title,

@@ -35,6 +35,14 @@
         where news_id = #{newsId,jdbcType=INTEGER}
     </select>
 
+    <!--按照新闻类别获取-->
+    <select id="selectByNewsType" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from News
+        where News_type_type_id = #{newsTypeId}
+    </select>
+
     <!--获取所有信息-->
     <select id="selectAll" resultMap="allResultMap">
         select n.news_id, n.news_title, n.news_time, n.Admin_admin_id, n.News_type_type_id, nt.type_name
@@ -47,6 +55,15 @@
         delete
         from News
         where news_id = #{newsId,jdbcType=INTEGER}
+    </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete
+        from News
+        where news_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.newsId}
+        </foreach>
     </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.News">
         insert into News (news_id,

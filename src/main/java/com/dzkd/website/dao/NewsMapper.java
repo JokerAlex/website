@@ -9,11 +9,15 @@ import java.util.List;
 public interface NewsMapper {
     int deleteByPrimaryKey(Integer newsId);
 
+    int deleteBatch(List<News> newsList);
+
     int insert(News record);
 
     int insertSelective(News record);
 
     News selectByPrimaryKey(Integer newsId);
+
+    List<News> selectByNewsType(Integer newsTypeId);
 
     List<News> selectAll();
 

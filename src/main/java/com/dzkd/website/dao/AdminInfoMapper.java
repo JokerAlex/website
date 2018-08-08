@@ -10,13 +10,15 @@ import java.util.List;
 public interface AdminInfoMapper {
     int deleteByPrimaryKey(Integer adminId);
 
+    int deleteBatch(List<AdminInfo> adminInfoList);
+
     int insert(AdminInfo record);
 
     int insertSelective(AdminInfo record);
 
     AdminInfo selectByPrimaryKey(Integer adminId);
 
-    AdminInfo selectByForeignKey(Integer userId);
+    AdminInfo selectByAdminId(Integer adminId);
 
     AdminInfo selectByUserName(@Param("userName") String userName, @Param("password") String password);
 

@@ -39,6 +39,15 @@
         from Notice
         where notice_id = #{noticeId,jdbcType=INTEGER}
     </delete>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete
+        from Notice
+        where notice_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.noticeId}
+        </foreach>
+    </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.Notice">
         insert into Notice (notice_id, notice_content, notice_time, notice_acess_number, Admin_admin_id)
         values (#{noticeId,jdbcType=INTEGER},
