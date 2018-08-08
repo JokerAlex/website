@@ -36,32 +36,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 获取所有学生信息
-     *
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    @Override
-    public R getAllStudent(int pageNum, int pageSize) {
-        if (pageNum <= 0) {
-            pageNum = 1;
-        }
-        if (pageSize <= 0) {
-            pageSize = 10;
-        }
-        PageHelper.startPage(pageNum, pageSize);
-        List<Student> studentList = studentMapper.selectAll();
-        PageInfo<Student> pageInfo = new PageInfo<>(studentList);
-
-        JSONObject data = new JSONObject();
-        data.put("data", studentList);
-        data.put("pageInfo", pageInfo);
-
-        return R.isOk().data(data);
-    }
-
-    /**
      * 获取所有管理员信息
      *
      * @param pageNum
@@ -88,17 +62,26 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 添加用户
-     *
-     * @param userInfo
+     * 获取单个管理员信息
+     * @param adminId
      * @return
      */
     @Override
-    public int addUserInfo(UserInfo userInfo) {
-        if (userInfo == null) {
-            return -1;
+    public R getAdminInfo(Integer adminId) {
+        if (adminId == null) {
+            return R.isFail(new Exception("参数错误"));
         }
-        return userInfoMapper.insertSelective(userInfo);
+
+        try {
+            AdminInfo adminInfo = adminInfoMapper.selectByAdminId(adminId);
+            if (adminInfo == null) {
+                return R.isFail(new Exception("Not Found"));
+            }
+            return R.isOk().data(adminInfo);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取信息失败"));
+        }
     }
 
     /**
@@ -198,6 +181,55 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 获取所有学生信息
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public R getAllStudent(int pageNum, int pageSize) {
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Student> studentList = studentMapper.selectAll();
+        PageInfo<Student> pageInfo = new PageInfo<>(studentList);
+
+        JSONObject data = new JSONObject();
+        data.put("data", studentList);
+        data.put("pageInfo", pageInfo);
+
+        return R.isOk().data(data);
+    }
+
+    /**
+     * 获取单个学生信息
+     * @param stuId
+     * @return
+     */
+    @Override
+    public R getStudent(Integer stuId) {
+        if (stuId == null) {
+            return R.isFail(new Exception("参数错误"));
+        }
+
+        try {
+            Student student = studentMapper.selectByStuId(stuId);
+            if (student == null) {
+                return R.isFail(new Exception("Not Found"));
+            }
+            return R.isOk().data(student);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取信息失败"));
+        }
+    }
+
+    /**
      * 添加学生
      *
      * @param student
@@ -217,7 +249,7 @@ public class UserServiceImpl implements UserService {
                 return R.isFail(new Exception("该用户名已存在"));
             }
             //插入用户基本信息
-            int insertUser = addUserInfo(userInfo);
+            int insertUser = userInfoMapper.insertSelective(userInfo);
             logger.info("addStudent->insertUser:" + insertUser);
             //插入学生信息
             student.setUserUserInfoId(userInfo.getUserInfoId());
@@ -295,5 +327,4 @@ public class UserServiceImpl implements UserService {
             return R.isFail(new Exception("修改密码失败"));
         }
     }
-
 }
