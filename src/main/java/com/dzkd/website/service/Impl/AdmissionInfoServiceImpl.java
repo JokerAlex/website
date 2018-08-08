@@ -37,13 +37,14 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
 
     /**
      * 添加招生信息
+     *
      * @param article
      * @return
      */
     @Override
     public R addArticle(Article article) {
         if (article == null) {
-            return R.isFail(new Exception("添加招生信息失败"));
+            return R.isFail(new Exception("参数错误"));
         }
 
         try {
@@ -65,13 +66,14 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
 
     /**
      * 更新招生信息
+     *
      * @param article
      * @return
      */
     @Override
     public R updateArticle(Article article) {
         if (article == null || article.getArticleId() == null) {
-            return R.isFail(new Exception("更新招生信息失败"));
+            return R.isFail(new Exception("参数错误"));
         }
 
         try {
@@ -92,21 +94,22 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
 
     /**
      * 删除招生信息
-     * @param article
+     *
+     * @param articleId
      * @return
      */
     @Override
-    public R delArticle(Article article) {
-        if (article == null || article.getArticleId() == null) {
-            return R.isFail(new Exception("删除招生信息失败"));
+    public R delArticle(Integer articleId) {
+        if (articleId == null) {
+            return R.isFail(new Exception("参数错误"));
         }
 
         try {
-            int del = admissionInfoMapper.deleteByPrimaryKey(article.getArticleId());
+            int del = admissionInfoMapper.deleteByPrimaryKey(articleId);
             logger.info("AdmissionInfoServiceImpl->delAdmission:" + del);
 
             //删除文章附带的文件
-            List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(0,article.getArticleId());
+            List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(0, articleId);
             if (fileInfoList.size() != 0) {
                 FileUtil.delFile(fileInfoList, 0);
 
@@ -122,18 +125,56 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
     }
 
     /**
-     * 查看招生信息
-     * @param article
+     * 批量删除
+     *
+     * @param articles
      * @return
      */
     @Override
-    public R searchArticle(Article article) {
-        if (article == null || article.getArticleId() == null) {
+    public R delBatch(List<Article> articles) {
+        if (articles.size() == 0) {
+            return R.isFail(new Exception("参数错误"));
+        }
+
+        try {
+            List<AdmissionInfo> admissionInfoList = new ArrayList<>();
+            for (Article article : articles) {
+                admissionInfoList.add(transform(article));
+
+                //删除文章附带的文件
+                List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(0, article.getArticleId());
+                if (fileInfoList.size() != 0) {
+                    FileUtil.delFile(fileInfoList, 0);
+
+                    int delFiles = fileInfoMapper.deleteBatch(fileInfoList);
+                    logger.info("AdmissionInfoServiceImpl->delBatch->delFiles:" + delFiles);
+                }
+            }
+
+            int delBatch = admissionInfoMapper.deleteBatch(admissionInfoList);
+            logger.info("AdmissionInfoServiceImpl->delBatch:" + (delBatch == articles.size()));
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除失败"));
+        }
+    }
+
+    /**
+     * 查看招生信息
+     *
+     * @param articleId
+     * @return
+     */
+    @Override
+    public R searchArticle(Integer articleId) {
+        if (articleId == null) {
             return R.isFail(new Exception("获取招生信息失败"));
         }
 
         try {
-            AdmissionInfo admissionInfo = admissionInfoMapper.selectByPrimaryKey(article.getArticleId());
+            AdmissionInfo admissionInfo = admissionInfoMapper.selectByPrimaryKey(articleId);
             if (admissionInfo == null) {
                 return R.isFail(new Exception("获取招生信息失败"));
             } else {
@@ -151,7 +192,7 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
                 logger.info("AdmissionInfoServiceImpl->updatePageViews:" + updatePageViews);
 
                 //获取文件信息
-                List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(0,article.getArticleId());
+                List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(0, articleId);
                 JSONObject data = new JSONObject();
                 data.put("articleResult", articleResult);
                 data.put("files", fileInfoList);
@@ -182,13 +223,13 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
         PageInfo<AdmissionInfo> pageInfo = new PageInfo<>(admissionInfoList);
 
         List<Article> articleList = new ArrayList<>();
-        for (int i=0;i<admissionInfoList.size();i++) {
+        for (int i = 0; i < admissionInfoList.size(); i++) {
             Article article = new Article();
             article.setArticleId(admissionInfoList.get(i).getAdmInfoId());
             article.setUpdateTime(admissionInfoList.get(i).getAdmInfoTime());
             article.setArticleTitle(admissionInfoList.get(i).getAdmInfoTitle());
             article.setAdminId(admissionInfoList.get(i).getAdminAdminId());
-            articleList.add(i,article);
+            articleList.add(i, article);
         }
 
         JSONObject data = new JSONObject();

@@ -29,6 +29,7 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
 
     /**
      * 添加专业介绍
+     *
      * @param professionalIntroduction
      * @return
      */
@@ -45,7 +46,7 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
             professionalIntroduction.setProfessionalAcessNumber(0);
 
             int insert = professionalIntroductionMapper.insertSelective(professionalIntroduction);
-            logger.info("ProfessionalIntroductionServiceImpl->addProfessional->insert" + insert);
+            logger.info("ProfessionalIntroductionServiceImpl->insert" + insert);
 
             return R.isOk();
         } catch (Exception e) {
@@ -56,6 +57,7 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
 
     /**
      * 更新专业介绍
+     *
      * @param professionalIntroduction
      * @return
      */
@@ -71,7 +73,7 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
             professionalIntroduction.setProfessionalAcessNumber(null);//访问量不在此处更新
 
             int update = professionalIntroductionMapper.updateByPrimaryKeySelective(professionalIntroduction);
-            logger.info("ProfessionalIntroductionServiceImpl->addProfessional->update" + update);
+            logger.info("ProfessionalIntroductionServiceImpl->update" + update);
 
             return R.isOk();
         } catch (Exception e) {
@@ -82,18 +84,42 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
 
     /**
      * 删除专业介绍
-     * @param professionalIntroduction
+     *
+     * @param professionalIntroductionId
      * @return
      */
     @Override
-    public R delArticle(ProfessionalIntroduction professionalIntroduction) {
-        if (professionalIntroduction == null || professionalIntroduction.getProfessionalId() == null) {
+    public R delArticle(Integer professionalIntroductionId) {
+        if (professionalIntroductionId == null) {
             return R.isFail(new Exception("删除专业简介失败"));
         }
 
         try {
-            int del = professionalIntroductionMapper.deleteByPrimaryKey(professionalIntroduction.getProfessionalId());
-            logger.info("ProfessionalIntroductionServiceImpl->addProfessional->del" + del);
+            int del = professionalIntroductionMapper.deleteByPrimaryKey(professionalIntroductionId);
+            logger.info("ProfessionalIntroductionServiceImpl->del" + del);
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除专业介绍失败"));
+        }
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param professionalIntroductions
+     * @return
+     */
+    @Override
+    public R delBatch(List<ProfessionalIntroduction> professionalIntroductions) {
+        if (professionalIntroductions.size() == 0) {
+            return R.isFail(new Exception("删除专业介绍失败"));
+        }
+
+        try {
+            int delBatch = professionalIntroductionMapper.deleteBatch(professionalIntroductions);
+            logger.info("ProfessionalIntroductionServiceImpl->delBatch:" + (delBatch == professionalIntroductions.size()));
 
             return R.isOk();
         } catch (Exception e) {
@@ -104,17 +130,18 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
 
     /**
      * 查看专业介绍
-     * @param professionalIntroduction
+     *
+     * @param professionalIntroductionId
      * @return
      */
     @Override
-    public R searchArticle(ProfessionalIntroduction professionalIntroduction) {
-        if (professionalIntroduction == null || professionalIntroduction.getProfessionalId() == null) {
+    public R searchArticle(Integer professionalIntroductionId) {
+        if (professionalIntroductionId == null) {
             return R.isFail(new Exception("获取专业简介失败"));
         }
 
         try {
-            ProfessionalIntroduction professional = professionalIntroductionMapper.selectByPrimaryKey(professionalIntroduction.getProfessionalId());
+            ProfessionalIntroduction professional = professionalIntroductionMapper.selectByPrimaryKey(professionalIntroductionId);
             if (professional == null) {
                 return R.isFail(new Exception("获取专业简介失败"));
             } else {
@@ -133,6 +160,7 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
 
     /**
      * 返回列表
+     *
      * @param pageNum
      * @param pageSize
      * @return

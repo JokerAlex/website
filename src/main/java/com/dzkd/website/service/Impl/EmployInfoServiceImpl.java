@@ -2,10 +2,13 @@ package com.dzkd.website.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dzkd.website.dao.EmployInfoMapper;
+import com.dzkd.website.dao.FileInfoMapper;
 import com.dzkd.website.pojo.Article;
 import com.dzkd.website.pojo.EmployInfo;
+import com.dzkd.website.pojo.FileInfo;
 import com.dzkd.website.pojo.R;
 import com.dzkd.website.service.ArticleService;
+import com.dzkd.website.util.FileUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.logging.log4j.LogManager;
@@ -23,14 +26,17 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
     private static final Logger logger = LogManager.getLogger(EmployInfoServiceImpl.class);
 
     private EmployInfoMapper employInfoMapper;
+    private FileInfoMapper fileInfoMapper;
 
     @Autowired
-    public EmployInfoServiceImpl(EmployInfoMapper employInfoMapper) {
+    public EmployInfoServiceImpl(EmployInfoMapper employInfoMapper, FileInfoMapper fileInfoMapper) {
         this.employInfoMapper = employInfoMapper;
+        this.fileInfoMapper = fileInfoMapper;
     }
 
     /**
      * 添加就业信息
+     *
      * @param article
      * @return
      */
@@ -59,6 +65,7 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
 
     /**
      * 更新就业信息
+     *
      * @param article
      * @return
      */
@@ -86,46 +93,94 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
 
     /**
      * 删除就业信息
-     * @param article
+     *
+     * @param articleId
      * @return
      */
     @Override
-    public R delArticle(Article article) {
-        if (article == null || article.getArticleId() == null) {
+    public R delArticle(Integer articleId) {
+        if (articleId == null) {
             return R.isFail(new Exception("删除就业信息失败"));
         }
 
         try {
-            int del = employInfoMapper.deleteByPrimaryKey(article.getArticleId());
+            int del = employInfoMapper.deleteByPrimaryKey(articleId);
             logger.info("EmployInfoServiceImpl->del:" + del);
+
+            //删除文章附带的文件
+            List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(1, articleId);
+            if (fileInfoList.size() != 0) {
+                FileUtil.delFile(fileInfoList, 0);
+
+                int delFiles = fileInfoMapper.deleteBatch(fileInfoList);
+                logger.info("EmployInfoServiceImpl->delBatch->delFiles:" + delFiles);
+            }
 
             return R.isOk();
         } catch (Exception e) {
             logger.catching(e);
-            return R.isFail(new Exception("更新就业信息失败"));
+            return R.isFail(new Exception("删除就业信息失败"));
+        }
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param articles
+     * @return
+     */
+    @Override
+    public R delBatch(List<Article> articles) {
+        if (articles.size() == 0) {
+            return R.isFail(new Exception("删除就业信息失败"));
+        }
+
+        try {
+            List<EmployInfo> employInfoList = new ArrayList<>();
+            for (Article article : articles) {
+                employInfoList.add(transform(article));
+
+                //删除文章附带的文件
+                List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(1, article.getArticleId());
+                if (fileInfoList.size() != 0) {
+                    FileUtil.delFile(fileInfoList, 0);
+
+                    int delFiles = fileInfoMapper.deleteBatch(fileInfoList);
+                    logger.info("EmployInfoServiceImpl->delBatch->delFiles:" + delFiles);
+                }
+            }
+
+            int delBatch = employInfoMapper.deleteBatch(employInfoList);
+            logger.info("EmployInfoServiceImpl->delBatch:" + (delBatch == articles.size()));
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除就业信息失败"));
         }
     }
 
     /**
      * 查看就业信息
-     * @param article
+     *
+     * @param articleId
      * @return
      */
     @Override
-    public R searchArticle(Article article) {
-        if (article == null || article.getArticleId() == null) {
+    public R searchArticle(Integer articleId) {
+        if (articleId == null) {
             return R.isFail(new Exception("获取就业信息失败"));
         }
 
         try {
-            EmployInfo employInfo = employInfoMapper.selectByPrimaryKey(article.getArticleId());
+            EmployInfo employInfo = employInfoMapper.selectByPrimaryKey(articleId);
             if (employInfo == null) {
                 return R.isFail(new Exception("获取就业信息失败"));
             } else {
                 Article articleResult = new Article(
                         employInfo.getEmpInfoId(),
                         employInfo.getAdminAdminId(),
-                        employInfo.getEmpAcessNumber()+ 1,
+                        employInfo.getEmpAcessNumber() + 1,
                         employInfo.getEmpInfoTime(),
                         employInfo.getEmpInfoTitle(),
                         employInfo.getEmpInfoContent()
@@ -135,7 +190,13 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
                 int updatePageViews = employInfoMapper.updateByPrimaryKeySelective(employInfo);
                 logger.info("EmployInfoServiceImpl->updatePageViews:" + updatePageViews);
 
-                return  R.isOk().data(articleResult);
+                //获取文件信息
+                List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(1, articleId);
+                JSONObject data = new JSONObject();
+                data.put("articleResult", articleResult);
+                data.put("files", fileInfoList);
+
+                return R.isOk().data(data);
             }
         } catch (Exception e) {
             logger.catching(e);
@@ -145,6 +206,7 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
 
     /**
      * 返回列表
+     *
      * @param pageNum
      * @param pageSize
      * @return
@@ -167,13 +229,13 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
         PageInfo<EmployInfo> pageInfo = new PageInfo<>(employInfoList);
 
         List<Article> articleList = new ArrayList<>();
-        for (int i=0;i<employInfoList.size();i++) {
+        for (int i = 0; i < employInfoList.size(); i++) {
             Article article = new Article();
             article.setArticleId(employInfoList.get(i).getEmpInfoId());
             article.setUpdateTime(employInfoList.get(i).getEmpInfoTime());
             article.setArticleTitle(employInfoList.get(i).getEmpInfoTitle());
             article.setAdminId(employInfoList.get(i).getAdminAdminId());
-            articleList.add(i,article);
+            articleList.add(i, article);
         }
 
 

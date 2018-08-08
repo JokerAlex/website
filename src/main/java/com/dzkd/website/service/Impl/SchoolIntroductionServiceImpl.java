@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
@@ -67,24 +68,23 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
     }
 
     @Override
-    public R delArticle(Article article) {
+    public R delArticle(Integer articleId) {
         return null;
     }
 
     /**
      * 查看学校简介
      *
-     * @param article
+     * @param articleId
      * @return
      */
     @Override
-    public R searchArticle(Article article) {
-        if (article == null) {
-            return R.isFail(new Exception("获取学校简介失败"));
+    public R searchArticle(Integer articleId) {
+        if (articleId == null) {
+            return R.isFail(new Exception("参数错误"));
         }
         try {
-            article.setArticleId(1);
-            SchoolIntroduction schoolIntroduction = schoolIntroductionMapper.selectByPrimaryKey(article.getArticleId());
+            SchoolIntroduction schoolIntroduction = schoolIntroductionMapper.selectByPrimaryKey(1);
             Article school = new Article(
                     schoolIntroduction.getSchoolId(),
                     schoolIntroduction.getAdminAdminId(),
@@ -107,6 +107,11 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
 
     @Override
     public R showAll(Integer pageNum, Integer pageSize) {
+        return null;
+    }
+
+    @Override
+    public R delBatch(List<Article> articleList) {
         return null;
     }
 }

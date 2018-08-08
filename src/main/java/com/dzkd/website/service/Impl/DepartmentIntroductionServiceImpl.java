@@ -36,6 +36,7 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
 
     /**
      * 添加院系简介
+     *
      * @param article
      * @return
      */
@@ -64,6 +65,7 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
 
     /**
      * 更新院系简介
+     *
      * @param article
      * @return
      */
@@ -91,21 +93,18 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
 
     /**
      * 删除院系简介
-     * @param article
+     *
+     * @param articleId
      * @return
      */
     @Override
-    public R delArticle(Article article) {
-        if (article == null || article.getArticleId() == null) {
+    public R delArticle(Integer articleId) {
+        if (articleId == null) {
             return R.isFail(new Exception("删除院系简介失败"));
         }
 
         try {
-            //删除院系下的学院
-            int delProfession = professionalIntroductionMapper.deleteByDepartmentId(article.getArticleId());
-            logger.info("DepartmentIntroductionServiceImpl->delProfession:" + delProfession);
-
-            int delDepartment = departmentIntroductionMapper.deleteByPrimaryKey(article.getArticleId());
+            int delDepartment = departmentIntroductionMapper.deleteByPrimaryKey(articleId);
             logger.info("DepartmentIntroductionServiceImpl->delDepartment:" + delDepartment);
 
             return R.isOk();
@@ -116,18 +115,47 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
     }
 
     /**
-     * 查看院系简介
-     * @param article
+     * 批量删除
+     *
+     * @param articles
      * @return
      */
     @Override
-    public R searchArticle(Article article) {
-        if (article == null || article.getArticleId() == null) {
+    public R delBatch(List<Article> articles) {
+        if (articles.size() == 0) {
+            return R.isFail(new Exception("删除院系简介失败"));
+        }
+
+        try {
+            List<DepartmentIntroduction> departmentIntroductionList = new ArrayList<>();
+            for (Article article : articles) {
+                departmentIntroductionList.add(transform(article));
+            }
+
+            int delBatch = departmentIntroductionMapper.deleteBatch(departmentIntroductionList);
+            logger.info("DepartmentIntroductionServiceImpl->delBatch:" + (delBatch == articles.size()));
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除院系简介失败"));
+        }
+    }
+
+    /**
+     * 查看院系简介
+     *
+     * @param articleId
+     * @return
+     */
+    @Override
+    public R searchArticle(Integer articleId) {
+        if (articleId == null) {
             return R.isFail(new Exception("获取院系简介信息失败"));
         }
 
         try {
-            DepartmentIntroduction departmentIntroduction = departmentIntroductionMapper.selectByPrimaryKey(article.getArticleId());
+            DepartmentIntroduction departmentIntroduction = departmentIntroductionMapper.selectByPrimaryKey(articleId);
             if (departmentIntroduction == null) {
                 return R.isFail(new Exception("获取院系简介信息失败"));
             } else {
@@ -154,6 +182,7 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
 
     /**
      * 返回列表
+     *
      * @param pageNum
      * @param pageSize
      * @return
@@ -175,13 +204,13 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
         List<DepartmentIntroduction> departmentIntroductionList = departmentIntroductionMapper.selectAll();
         PageInfo<DepartmentIntroduction> pageInfo = new PageInfo<>(departmentIntroductionList);
         List<Article> articleList = new ArrayList<>();
-        for (int i=0;i<departmentIntroductionList.size();i++) {
+        for (int i = 0; i < departmentIntroductionList.size(); i++) {
             Article article = new Article();
             article.setArticleId(departmentIntroductionList.get(i).getDepartmentId());
             article.setUpdateTime(departmentIntroductionList.get(i).getDepartmentUpdateTime());
             article.setArticleTitle(departmentIntroductionList.get(i).getDepartmentTitle());
             article.setAdminId(departmentIntroductionList.get(i).getAdminAdminId());
-            articleList.add(i,article);
+            articleList.add(i, article);
         }
 
         JSONObject data = new JSONObject();

@@ -90,23 +90,23 @@ public class NewsServiceImpl implements ArticleService<News> {
     /**
      * 删除
      *
-     * @param news
+     * @param newsId
      * @return
      */
     @Override
-    public R delArticle(News news) {
-        if (news == null || news.getNewsId() == null) {
+    public R delArticle(Integer newsId) {
+        if (newsId == null) {
             return R.isFail(new Exception("删除新闻失败"));
         }
 
         try {
-            int del = newsMapper.deleteByPrimaryKey(news.getNewsId());
+            int del = newsMapper.deleteByPrimaryKey(newsId);
             logger.info("NewsServiceImpl->del:" + del);
 
             //删除新闻图片
-            List<Picture> pictureList = pictureMapper.selectByArticle(0,news.getNewsId());
+            List<Picture> pictureList = pictureMapper.selectByArticle(0, newsId);
             if (pictureList.size() != 0) {
-                FileUtil.delFile(pictureList,1);
+                FileUtil.delFile(pictureList, 1);
 
                 int delPictures = pictureMapper.deleteBatch(pictureList);
                 logger.info("NewsServiceImpl->delPictures:" + delPictures);
@@ -120,19 +120,52 @@ public class NewsServiceImpl implements ArticleService<News> {
     }
 
     /**
-     * 查看新闻
+     * 批量删除
      *
-     * @param news
+     * @param newsList
      * @return
      */
     @Override
-    public R searchArticle(News news) {
-        if (news == null || news.getNewsId() == null) {
+    public R delBatch(List<News> newsList) {
+        if (newsList.size() == 0) {
+            return R.isFail(new Exception("删除新闻失败"));
+        }
+
+        try {
+            //删除新闻图片
+            for (News news : newsList) {
+                List<Picture> pictureList = pictureMapper.selectByArticle(0, news.getNewsId());
+                if (pictureList.size() != 0) {
+                    FileUtil.delFile(pictureList, 1);
+
+                    int delPictures = pictureMapper.deleteBatch(pictureList);
+                    logger.info("NewsServiceImpl->delBatch->delPictures:" + delPictures);
+                }
+            }
+            int delBatch = newsMapper.deleteBatch(newsList);
+            logger.info("NewsServiceImpl->delBatch:" + (delBatch == newsList.size()));
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除新闻失败"));
+        }
+    }
+
+    /**
+     * 查看新闻
+     *
+     * @param newsId
+     * @return
+     */
+    @Override
+    public R searchArticle(Integer newsId) {
+        if (newsId == null) {
             return R.isFail(new Exception("获取新闻失败"));
         }
 
         try {
-            News newsResult = newsMapper.selectByPrimaryKey(news.getNewsId());
+            News newsResult = newsMapper.selectByPrimaryKey(newsId);
             if (newsResult == null) {
                 return R.isFail(new Exception("获取新闻失败"));
             }
@@ -142,7 +175,7 @@ public class NewsServiceImpl implements ArticleService<News> {
             logger.info("NewsServiceImpl->updatePageViews:" + updatePageViews);
 
             //获取图片信息
-            List<Picture> pictureList = pictureMapper.selectByArticle(0,news.getNewsId());
+            List<Picture> pictureList = pictureMapper.selectByArticle(0, newsId);
             JSONObject data = new JSONObject();
             data.put("newResult", newsResult);
             data.put("pictures", pictureList);
@@ -156,6 +189,7 @@ public class NewsServiceImpl implements ArticleService<News> {
 
     /**
      * 返回列表
+     *
      * @param pageNum
      * @param pageSize
      * @return

@@ -31,6 +31,7 @@ public class NoticeServiceImpl implements ArticleService<Article> {
 
     /**
      * 添加公告
+     *
      * @param article
      * @return
      */
@@ -59,6 +60,7 @@ public class NoticeServiceImpl implements ArticleService<Article> {
 
     /**
      * 更新公告
+     *
      * @param article
      * @return
      */
@@ -86,18 +88,47 @@ public class NoticeServiceImpl implements ArticleService<Article> {
 
     /**
      * 删除公告
-     * @param article
+     *
+     * @param articleId
      * @return
      */
     @Override
-    public R delArticle(Article article) {
-        if (article == null || article.getArticleId() == null) {
+    public R delArticle(Integer articleId) {
+        if (articleId == null) {
             return R.isFail(new Exception("删除公告失败"));
         }
 
         try {
-            int del = noticeMapper.deleteByPrimaryKey(article.getArticleId());
-            logger.info("NoticeServiceImpl->add->delDepartment:" + del);
+            int del = noticeMapper.deleteByPrimaryKey(articleId);
+            logger.info("NoticeServiceImpl->del:" + del);
+
+            return R.isOk();
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("删除公告失败"));
+        }
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param articles
+     * @return
+     */
+    @Override
+    public R delBatch(List<Article> articles) {
+        if (articles.size() == 0) {
+            return R.isFail(new Exception("删除公告失败"));
+        }
+
+        try {
+            List<Notice> noticeList = new ArrayList<>();
+            for (Article article : articles) {
+                noticeList.add(transform(article));
+            }
+
+            int delBatch = noticeMapper.deleteBatch(noticeList);
+            logger.info("NoticeServiceImpl->del:" + (delBatch == articles.size()));
 
             return R.isOk();
         } catch (Exception e) {
@@ -108,17 +139,18 @@ public class NoticeServiceImpl implements ArticleService<Article> {
 
     /**
      * 查看公告
-     * @param article
+     *
+     * @param articleId
      * @return
      */
     @Override
-    public R searchArticle(Article article) {
-        if (article == null || article.getArticleId() == null) {
+    public R searchArticle(Integer articleId) {
+        if (articleId == null) {
             return R.isFail(new Exception("获取公告失败"));
         }
 
         try {
-            Notice notice = noticeMapper.selectByPrimaryKey(article.getArticleId());
+            Notice notice = noticeMapper.selectByPrimaryKey(articleId);
             if (notice == null) {
                 return R.isFail(new Exception("获取公告失败"));
             } else {
@@ -143,6 +175,7 @@ public class NoticeServiceImpl implements ArticleService<Article> {
 
     /**
      * 返回列表
+     *
      * @param pageNum
      * @param pageSize
      * @return
@@ -165,12 +198,12 @@ public class NoticeServiceImpl implements ArticleService<Article> {
         PageInfo<Notice> pageInfo = new PageInfo<>(noticeList);
 
         List<Article> articleList = new ArrayList<>();
-        for (int i = 0;i<noticeList.size();i++){
+        for (int i = 0; i < noticeList.size(); i++) {
             Article article = new Article();
             article.setArticleId(noticeList.get(i).getNoticeId());
             article.setAdminId(noticeList.get(i).getAdminAdminId());
             article.setUpdateTime(noticeList.get(i).getNoticeTime());
-            articleList.add(i,article);
+            articleList.add(i, article);
         }
 
         JSONObject data = new JSONObject();
