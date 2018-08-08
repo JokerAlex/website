@@ -22,6 +22,7 @@ public class FileUtil {
 
     /**
      * 招生信息文件type:0,articleCate:0
+     * 就业信息文件type:0,articleCate:1
      * 新闻图片type:1,articleCate:0
      *
      * @param file
