@@ -19,7 +19,7 @@ public interface ProfessionalIntroductionMapper {
 
     ProfessionalIntroduction selectByPrimaryKey(Integer professionalId);
 
-    List<ProfessionalIntroduction> selectAll();
+    List<ProfessionalIntroduction> selectAll(Integer departmentId);
 
     int updateByPrimaryKeySelective(ProfessionalIntroduction record);
 

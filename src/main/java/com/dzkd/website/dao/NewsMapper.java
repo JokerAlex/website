@@ -19,7 +19,7 @@ public interface NewsMapper {
 
     List<News> selectByNewsType(Integer newsTypeId);
 
-    List<News> selectAll();
+    List<News> selectAll(Integer newsTypeId);
 
     int updateByPrimaryKeySelective(News record);
 

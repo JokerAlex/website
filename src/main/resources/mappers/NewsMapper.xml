@@ -49,6 +49,9 @@
         from News n,
              News_type nt
         where n.News_type_type_id = nt.type_id
+        <set>
+            <if test="newsTypeId != null"> and n.News_type_type_id = #{newsTypeId}</if>
+        </set>
         order by n.news_time
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

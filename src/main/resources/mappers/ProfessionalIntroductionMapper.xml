@@ -45,6 +45,9 @@
         from Professional_introduction p,
              Department_introduction d
         where p.Department_introduction_department_id = d.department_id
+        <set>
+            <if test="departmentId != null">and p.Department_introduction_department_id = #{departmentId} </if>
+        </set>
         order by p.professional_update_time
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
