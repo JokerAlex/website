@@ -45,9 +45,7 @@ public class InfoController {
 
     @RequestMapping(value = "/admission/{articleId}", method = RequestMethod.GET)
     public R searchAdmissionInfo(@PathVariable(name = "articleId") int articleId) {
-        Article article = new Article();
-        article.setArticleId(articleId);
-        return admissionService.searchArticle(article);
+        return admissionService.searchArticle(articleId);
     }
 
     @RequestMapping(value = "/admission", method = RequestMethod.GET)
@@ -63,9 +61,7 @@ public class InfoController {
 
     @RequestMapping(value = "/department/{articleId}", method = RequestMethod.GET)
     public R searchDepartment(@PathVariable(name = "articleId") int articleId) {
-        Article article = new Article();
-        article.setArticleId(articleId);
-        return departmentService.searchArticle(article);
+        return departmentService.searchArticle(articleId);
     }
 
     @RequestMapping(value = "/department", method = RequestMethod.GET)
@@ -81,9 +77,7 @@ public class InfoController {
 
     @RequestMapping(value = "/employ/{articleId}", method = RequestMethod.GET)
     public R searchEmployInfo(@PathVariable(name = "articleId") int articleId) {
-        Article article = new Article();
-        article.setArticleId(articleId);
-        return employInfoService.searchArticle(article);
+        return employInfoService.searchArticle(articleId);
     }
 
     @RequestMapping(value = "/employ", method = RequestMethod.GET)
@@ -99,9 +93,7 @@ public class InfoController {
 
     @RequestMapping(value = "/news/{newsId}", method = RequestMethod.GET)
     public R searchNews(@PathVariable(name = "newsId") int newsId) {
-        News news = new News();
-        news.setNewsId(newsId);
-        return newsService.searchArticle(news);
+        return newsService.searchArticle(newsId);
     }
 
     @RequestMapping(value = "/news", method = RequestMethod.GET)
@@ -117,9 +109,7 @@ public class InfoController {
 
     @RequestMapping(value = "/news/type/{newsTypeId}", method = RequestMethod.GET)
     public R searchNewsType(@PathVariable(name = "newsTypeId") int newsTypeId) {
-        NewsType newsType = new NewsType();
-        newsType.setTypeId(newsTypeId);
-        return newsTypeService.searchArticle(newsType);
+        return newsTypeService.searchArticle(newsTypeId);
     }
 
     @RequestMapping(value = "/news/type", method = RequestMethod.GET)
@@ -135,9 +125,7 @@ public class InfoController {
 
     @RequestMapping(value = "/notice/{noticeId}", method = RequestMethod.GET)
     public R searchNotice(@PathVariable(name = "noticeId") int articleId) {
-        Article article = new Article();
-        article.setArticleId(articleId);
-        return noticeService.searchArticle(article);
+        return noticeService.searchArticle(articleId);
     }
 
     @RequestMapping(value = "/notice", method = RequestMethod.GET)
@@ -153,9 +141,7 @@ public class InfoController {
 
     @RequestMapping(value = "/professional/{professionId}", method = RequestMethod.GET)
     public R searchProfession(@PathVariable(name = "professionId") int professionalIntroductionId) {
-        ProfessionalIntroduction professionalIntroduction = new ProfessionalIntroduction();
-        professionalIntroduction.setProfessionalId(professionalIntroductionId);
-        return professionalService.searchArticle(professionalIntroduction);
+        return professionalService.searchArticle(professionalIntroductionId);
     }
 
     @RequestMapping(value = "/professional", method = RequestMethod.GET)
@@ -171,9 +157,7 @@ public class InfoController {
 
     @RequestMapping(value = "/school", method = RequestMethod.GET)
     public R searchSchool() {
-        Article article = new Article();
-        article.setArticleId(1);
-        return schoolService.searchArticle(article);
+        return schoolService.searchArticle(1);
     }
 
 }
