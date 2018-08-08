@@ -195,7 +195,7 @@ public class NewsServiceImpl implements ArticleService<News> {
      * @return
      */
     @Override
-    public R showAll(Integer pageNum, Integer pageSize) {
+    public R showAll(Integer pageNum, Integer pageSize, Object newsTypeId) {
         if (pageNum == null || pageSize == null) {
             return R.isFail(new Exception("参数错误"));
         }
@@ -208,7 +208,7 @@ public class NewsServiceImpl implements ArticleService<News> {
         }
 
         PageHelper.startPage(pageNum, pageSize);
-        List<News> newsList = newsMapper.selectAll();
+        List<News> newsList = newsMapper.selectAll((Integer) newsTypeId);
         PageInfo<News> pageInfo = new PageInfo<>(newsList);
 
         JSONObject data = new JSONObject();

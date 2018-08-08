@@ -206,7 +206,7 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
     }
 
     @Override
-    public R showAll(Integer pageNum, Integer pageSize) {
+    public R showAll(Integer pageNum, Integer pageSize, Object object) {
         if (pageNum == null || pageSize == null) {
             return R.isFail(new Exception("参数错误"));
         }

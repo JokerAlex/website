@@ -166,7 +166,7 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
      * @return
      */
     @Override
-    public R showAll(Integer pageNum, Integer pageSize) {
+    public R showAll(Integer pageNum, Integer pageSize, Object departmentId) {
         if (pageNum == null || pageSize == null) {
             return R.isFail(new Exception("参数错误"));
         }
@@ -179,7 +179,7 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
         }
 
         PageHelper.startPage(pageNum, pageSize);
-        List<ProfessionalIntroduction> professionalIntroductionList = professionalIntroductionMapper.selectAll();
+        List<ProfessionalIntroduction> professionalIntroductionList = professionalIntroductionMapper.selectAll((Integer) departmentId);
         PageInfo<ProfessionalIntroduction> pageInfo = new PageInfo<>(professionalIntroductionList);
 
         JSONObject data = new JSONObject();

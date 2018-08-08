@@ -106,7 +106,7 @@ public class SchoolIntroductionServiceImpl implements ArticleService<Article> {
     }
 
     @Override
-    public R showAll(Integer pageNum, Integer pageSize) {
+    public R showAll(Integer pageNum, Integer pageSize, Object object) {
         return null;
     }
 
