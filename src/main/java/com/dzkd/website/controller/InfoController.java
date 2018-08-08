@@ -50,7 +50,7 @@ public class InfoController {
 
     @RequestMapping(value = "/admission", method = RequestMethod.GET)
     public R showAllAdmissionInfo(Integer pageNum, Integer pageSize) {
-        return admissionService.showAll(pageNum, pageSize);
+        return admissionService.showAll(pageNum, pageSize, null);
     }
 
     /**
@@ -66,7 +66,7 @@ public class InfoController {
 
     @RequestMapping(value = "/department", method = RequestMethod.GET)
     public R showAllDepartment(Integer pageNum, Integer pageSize) {
-        return departmentService.showAll(pageNum, pageSize);
+        return departmentService.showAll(pageNum, pageSize, null);
     }
 
     /**
@@ -82,7 +82,7 @@ public class InfoController {
 
     @RequestMapping(value = "/employ", method = RequestMethod.GET)
     public R showAllEmployInfo(Integer pageNum, Integer pageSize) {
-        return employInfoService.showAll(pageNum, pageSize);
+        return employInfoService.showAll(pageNum, pageSize, null);
     }
 
     /**
@@ -98,7 +98,7 @@ public class InfoController {
 
     @RequestMapping(value = "/news", method = RequestMethod.GET)
     public R showAllNews(Integer pageNum, Integer pageSize) {
-        return newsService.showAll(pageNum, pageSize);
+        return newsService.showAll(pageNum, pageSize, null);
     }
 
     /**
@@ -114,7 +114,7 @@ public class InfoController {
 
     @RequestMapping(value = "/news/type", method = RequestMethod.GET)
     public R showAllNewsType(Integer pageNum, Integer pageSize) {
-        return newsTypeService.showAll(pageNum, pageSize);
+        return newsTypeService.showAll(pageNum, pageSize, null);
     }
 
     /**
@@ -130,7 +130,7 @@ public class InfoController {
 
     @RequestMapping(value = "/notice", method = RequestMethod.GET)
     public R showAllNotice(Integer pageNum, Integer pageSize) {
-        return noticeService.showAll(pageNum, pageSize);
+        return noticeService.showAll(pageNum, pageSize, null);
     }
 
     /**
@@ -146,7 +146,7 @@ public class InfoController {
 
     @RequestMapping(value = "/professional", method = RequestMethod.GET)
     public R showAllProfession(Integer pageNum, Integer pageSize) {
-        return professionalService.showAll(pageNum, pageSize);
+        return professionalService.showAll(pageNum, pageSize, null);
     }
 
     /**
