@@ -133,8 +133,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admission", method = RequestMethod.GET)
-    public R showAllAdmissionInfo(Integer pageNum, Integer pageSize) {
-        return admissionService.showAll(pageNum, pageSize, null);
+    public R showAllAdmissionInfo(Integer pageNum, Integer pageSize, String admissionTitle) {
+        return admissionService.showAll(pageNum, pageSize, admissionTitle);
     }
 
     /**
@@ -169,8 +169,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/department", method = RequestMethod.GET)
-    public R showAllDepartment(Integer pageNum, Integer pageSize) {
-        return departmentService.showAll(pageNum, pageSize, null);
+    public R showAllDepartment(Integer pageNum, Integer pageSize, String departmentTitle) {
+        return departmentService.showAll(pageNum, pageSize, departmentTitle);
     }
 
     /**
@@ -205,8 +205,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/employ", method = RequestMethod.GET)
-    public R showAllEmployInfo(Integer pageNum, Integer pageSize) {
-        return employInfoService.showAll(pageNum, pageSize, null);
+    public R showAllEmployInfo(Integer pageNum, Integer pageSize, String employInfoTitle) {
+        return employInfoService.showAll(pageNum, pageSize, employInfoTitle);
     }
 
     /**
@@ -277,8 +277,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/news/type", method = RequestMethod.GET)
-    public R showAllNewsType(Integer pageNum, Integer pageSize) {
-        return newsTypeService.showAll(pageNum, pageSize, null);
+    public R showAllNewsType(Integer pageNum, Integer pageSize, String newsTypeName) {
+        return newsTypeService.showAll(pageNum, pageSize, newsTypeName);
     }
 
     /**
@@ -313,8 +313,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/notice", method = RequestMethod.GET)
-    public R showAllNotice(Integer pageNum, Integer pageSize) {
-        return noticeService.showAll(pageNum, pageSize, null);
+    public R showAllNotice(Integer pageNum, Integer pageSize, String noticeContent) {
+        return noticeService.showAll(pageNum, pageSize, noticeContent);
     }
 
     /**
