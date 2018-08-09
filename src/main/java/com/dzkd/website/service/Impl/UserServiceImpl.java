@@ -212,7 +212,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public R getStudent(Integer stuId) {
+    public R getStudent(String stuId) {
         if (stuId == null) {
             return R.isFail(new Exception("参数错误"));
         }

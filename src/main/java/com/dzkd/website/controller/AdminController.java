@@ -52,7 +52,7 @@ public class AdminController {
      */
 
     @RequestMapping(value = "/stu/{stuId}", method = RequestMethod.GET)
-    public R getStudent(@PathVariable(name = "stuId") Integer stuId) {
+    public R getStudent(@PathVariable(name = "stuId") String stuId) {
         return userService.getStudent(stuId);
     }
 

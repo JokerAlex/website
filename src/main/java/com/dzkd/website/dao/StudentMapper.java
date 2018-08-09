@@ -17,7 +17,7 @@ public interface StudentMapper {
 
     Student selectByPrimaryKey(String stuId);
 
-    Student selectByStuId(Integer stuId);
+    Student selectByStuId(String stuId);
 
     Student selectByUserNameAndPass(@Param("userName") String userName, @Param("password") String password);
 

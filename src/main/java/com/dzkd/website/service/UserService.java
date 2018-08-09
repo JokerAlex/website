@@ -18,7 +18,7 @@ public interface UserService {
 
     R getAllStudent(int pageNum, int pageSize);
 
-    R getStudent(Integer stuId);
+    R getStudent(String stuId);
 
     R addStudent(Student student);
 

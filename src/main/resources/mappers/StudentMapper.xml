@@ -45,7 +45,7 @@
     </select>
 
     <!--结合userInfo表,学号-->
-    <select id="selectByStuId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByStuId" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
                s.stu_id,
                s.stu_college,
