@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -188,7 +189,7 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
      * @return
      */
     @Override
-    public R showAll(Integer pageNum, Integer pageSize, Object object) {
+    public R showAll(Integer pageNum, Integer pageSize, Object departmentTitle) {
         if (pageNum == null || pageSize == null) {
             return R.isFail(new Exception("参数错误"));
         }
@@ -200,24 +201,32 @@ public class DepartmentIntroductionServiceImpl implements ArticleService<Article
             pageSize = 10;
         }
 
-        PageHelper.startPage(pageNum, pageSize);
-        List<DepartmentIntroduction> departmentIntroductionList = departmentIntroductionMapper.selectAll();
-        PageInfo<DepartmentIntroduction> pageInfo = new PageInfo<>(departmentIntroductionList);
-        List<Article> articleList = new ArrayList<>();
-        for (int i = 0; i < departmentIntroductionList.size(); i++) {
-            Article article = new Article();
-            article.setArticleId(departmentIntroductionList.get(i).getDepartmentId());
-            article.setUpdateTime(departmentIntroductionList.get(i).getDepartmentUpdateTime());
-            article.setArticleTitle(departmentIntroductionList.get(i).getDepartmentTitle());
-            article.setAdminId(departmentIntroductionList.get(i).getAdminAdminId());
-            articleList.add(i, article);
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            List<DepartmentIntroduction> departmentIntroductionList = departmentIntroductionMapper.selectAll((String) departmentTitle);
+            //按照更新时间
+            departmentIntroductionList.sort(Comparator.comparing(DepartmentIntroduction::getDepartmentUpdateTime).reversed());
+            PageInfo<DepartmentIntroduction> pageInfo = new PageInfo<>(departmentIntroductionList);
+
+            List<Article> articleList = new ArrayList<>();
+            for (int i = 0; i < departmentIntroductionList.size(); i++) {
+                Article article = new Article();
+                article.setArticleId(departmentIntroductionList.get(i).getDepartmentId());
+                article.setUpdateTime(departmentIntroductionList.get(i).getDepartmentUpdateTime());
+                article.setArticleTitle(departmentIntroductionList.get(i).getDepartmentTitle());
+                article.setAdminId(departmentIntroductionList.get(i).getAdminAdminId());
+                articleList.add(i, article);
+            }
+
+            JSONObject data = new JSONObject();
+            data.put("data", articleList);
+            data.put("pageInfo", pageInfo);
+
+            return R.isOk().data(data);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取院系简介信息失败"));
         }
-
-        JSONObject data = new JSONObject();
-        data.put("data", articleList);
-        data.put("pageInfo", pageInfo);
-
-        return R.isOk().data(data);
     }
 
     private DepartmentIntroduction transform(Article article) {

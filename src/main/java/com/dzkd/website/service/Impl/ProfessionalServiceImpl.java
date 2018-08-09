@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -178,14 +179,21 @@ public class ProfessionalServiceImpl implements ArticleService<ProfessionalIntro
             pageSize = 10;
         }
 
-        PageHelper.startPage(pageNum, pageSize);
-        List<ProfessionalIntroduction> professionalIntroductionList = professionalIntroductionMapper.selectAll((Integer) departmentId);
-        PageInfo<ProfessionalIntroduction> pageInfo = new PageInfo<>(professionalIntroductionList);
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            List<ProfessionalIntroduction> professionalIntroductionList = professionalIntroductionMapper.selectAll((Integer) departmentId);
+            //按照更新时间排序
+            professionalIntroductionList.sort(Comparator.comparing(ProfessionalIntroduction::getProfessionalUpdateTime).reversed());
+            PageInfo<ProfessionalIntroduction> pageInfo = new PageInfo<>(professionalIntroductionList);
 
-        JSONObject data = new JSONObject();
-        data.put("data", professionalIntroductionList);
-        data.put("pageInfo", pageInfo);
+            JSONObject data = new JSONObject();
+            data.put("data", professionalIntroductionList);
+            data.put("pageInfo", pageInfo);
 
-        return R.isOk().data(data);
+            return R.isOk().data(data);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取专业介绍失败"));
+        }
     }
 }

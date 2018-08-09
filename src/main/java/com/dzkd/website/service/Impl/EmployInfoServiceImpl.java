@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -212,7 +213,7 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
      * @return
      */
     @Override
-    public R showAll(Integer pageNum, Integer pageSize, Object object) {
+    public R showAll(Integer pageNum, Integer pageSize, Object employInfoTitle) {
         if (pageNum == null || pageSize == null) {
             return R.isFail(new Exception("参数错误"));
         }
@@ -224,26 +225,33 @@ public class EmployInfoServiceImpl implements ArticleService<Article> {
             pageSize = 10;
         }
 
-        PageHelper.startPage(pageNum, pageSize);
-        List<EmployInfo> employInfoList = employInfoMapper.selectAll();
-        PageInfo<EmployInfo> pageInfo = new PageInfo<>(employInfoList);
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            List<EmployInfo> employInfoList = employInfoMapper.selectAll((String) employInfoTitle);
+            //按照更新时间排序
+            employInfoList.sort(Comparator.comparing(EmployInfo::getEmpInfoTime).reversed());
+            PageInfo<EmployInfo> pageInfo = new PageInfo<>(employInfoList);
 
-        List<Article> articleList = new ArrayList<>();
-        for (int i = 0; i < employInfoList.size(); i++) {
-            Article article = new Article();
-            article.setArticleId(employInfoList.get(i).getEmpInfoId());
-            article.setUpdateTime(employInfoList.get(i).getEmpInfoTime());
-            article.setArticleTitle(employInfoList.get(i).getEmpInfoTitle());
-            article.setAdminId(employInfoList.get(i).getAdminAdminId());
-            articleList.add(i, article);
+            List<Article> articleList = new ArrayList<>();
+            for (int i = 0; i < employInfoList.size(); i++) {
+                Article article = new Article();
+                article.setArticleId(employInfoList.get(i).getEmpInfoId());
+                article.setUpdateTime(employInfoList.get(i).getEmpInfoTime());
+                article.setArticleTitle(employInfoList.get(i).getEmpInfoTitle());
+                article.setAdminId(employInfoList.get(i).getAdminAdminId());
+                articleList.add(i, article);
+            }
+
+
+            JSONObject data = new JSONObject();
+            data.put("data", articleList);
+            data.put("pageInfo", pageInfo);
+
+            return R.isOk().data(data);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取就业信息失败"));
         }
-
-
-        JSONObject data = new JSONObject();
-        data.put("data", articleList);
-        data.put("pageInfo", pageInfo);
-
-        return R.isOk().data(data);
     }
 
     private EmployInfo transform(Article article) {

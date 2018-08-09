@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -181,7 +182,7 @@ public class NoticeServiceImpl implements ArticleService<Article> {
      * @return
      */
     @Override
-    public R showAll(Integer pageNum, Integer pageSize, Object object) {
+    public R showAll(Integer pageNum, Integer pageSize, Object noticeContent) {
         if (pageNum == null || pageSize == null) {
             return R.isFail(new Exception("参数错误"));
         }
@@ -193,24 +194,31 @@ public class NoticeServiceImpl implements ArticleService<Article> {
             pageSize = 10;
         }
 
-        PageHelper.startPage(pageNum, pageSize);
-        List<Notice> noticeList = noticeMapper.selectAll();
-        PageInfo<Notice> pageInfo = new PageInfo<>(noticeList);
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            List<Notice> noticeList = noticeMapper.selectAll((String) noticeContent);
+            //按照更新时间排序
+            noticeList.sort(Comparator.comparing(Notice::getNoticeTime).reversed());
+            PageInfo<Notice> pageInfo = new PageInfo<>(noticeList);
 
-        List<Article> articleList = new ArrayList<>();
-        for (int i = 0; i < noticeList.size(); i++) {
-            Article article = new Article();
-            article.setArticleId(noticeList.get(i).getNoticeId());
-            article.setAdminId(noticeList.get(i).getAdminAdminId());
-            article.setUpdateTime(noticeList.get(i).getNoticeTime());
-            articleList.add(i, article);
+            List<Article> articleList = new ArrayList<>();
+            for (int i = 0; i < noticeList.size(); i++) {
+                Article article = new Article();
+                article.setArticleId(noticeList.get(i).getNoticeId());
+                article.setAdminId(noticeList.get(i).getAdminAdminId());
+                article.setUpdateTime(noticeList.get(i).getNoticeTime());
+                articleList.add(i, article);
+            }
+
+            JSONObject data = new JSONObject();
+            data.put("data", articleList);
+            data.put("pageInfo", pageInfo);
+
+            return R.isOk().data(data);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取公告失败"));
         }
-
-        JSONObject data = new JSONObject();
-        data.put("data", articleList);
-        data.put("pageInfo", pageInfo);
-
-        return R.isOk().data(data);
     }
 
     private Notice transform(Article article) {

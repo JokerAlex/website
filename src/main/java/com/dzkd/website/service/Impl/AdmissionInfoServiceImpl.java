@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -206,7 +207,7 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
     }
 
     @Override
-    public R showAll(Integer pageNum, Integer pageSize, Object object) {
+    public R showAll(Integer pageNum, Integer pageSize, Object admissionTitle) {
         if (pageNum == null || pageSize == null) {
             return R.isFail(new Exception("参数错误"));
         }
@@ -218,25 +219,32 @@ public class AdmissionInfoServiceImpl implements ArticleService<Article> {
             pageSize = 10;
         }
 
-        PageHelper.startPage(pageNum, pageSize);
-        List<AdmissionInfo> admissionInfoList = admissionInfoMapper.selectAll();
-        PageInfo<AdmissionInfo> pageInfo = new PageInfo<>(admissionInfoList);
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            List<AdmissionInfo> admissionInfoList = admissionInfoMapper.selectAll((String) admissionTitle);
+            //按照更新时间排序
+            admissionInfoList.sort(Comparator.comparing(AdmissionInfo::getAdmInfoTime).reversed());
+            PageInfo<AdmissionInfo> pageInfo = new PageInfo<>(admissionInfoList);
 
-        List<Article> articleList = new ArrayList<>();
-        for (int i = 0; i < admissionInfoList.size(); i++) {
-            Article article = new Article();
-            article.setArticleId(admissionInfoList.get(i).getAdmInfoId());
-            article.setUpdateTime(admissionInfoList.get(i).getAdmInfoTime());
-            article.setArticleTitle(admissionInfoList.get(i).getAdmInfoTitle());
-            article.setAdminId(admissionInfoList.get(i).getAdminAdminId());
-            articleList.add(i, article);
+            List<Article> articleList = new ArrayList<>();
+            for (int i = 0; i < admissionInfoList.size(); i++) {
+                Article article = new Article();
+                article.setArticleId(admissionInfoList.get(i).getAdmInfoId());
+                article.setUpdateTime(admissionInfoList.get(i).getAdmInfoTime());
+                article.setArticleTitle(admissionInfoList.get(i).getAdmInfoTitle());
+                article.setAdminId(admissionInfoList.get(i).getAdminAdminId());
+                articleList.add(i, article);
+            }
+
+            JSONObject data = new JSONObject();
+            data.put("data", articleList);
+            data.put("pageInfo", pageInfo);
+
+            return R.isOk().data(data);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取招生信息失败"));
         }
-
-        JSONObject data = new JSONObject();
-        data.put("data", articleList);
-        data.put("pageInfo", pageInfo);
-
-        return R.isOk().data(data);
     }
 
     private AdmissionInfo transform(Article article) {

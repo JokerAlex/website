@@ -175,7 +175,7 @@ public class NewsTypeServiceImpl implements ArticleService<NewsType> {
      * @return
      */
     @Override
-    public R showAll(Integer pageNum, Integer pageSize, Object object) {
+    public R showAll(Integer pageNum, Integer pageSize, Object newsTypeName) {
         if (pageNum == null || pageSize == null) {
             return R.isFail(new Exception("参数错误"));
         }
@@ -187,14 +187,19 @@ public class NewsTypeServiceImpl implements ArticleService<NewsType> {
             pageSize = 10;
         }
 
-        PageHelper.startPage(pageNum, pageSize);
-        List<NewsType> newsTypeList = newsTypeMapper.selectAll();
-        PageInfo<NewsType> pageInfo = new PageInfo<>(newsTypeList);
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            List<NewsType> newsTypeList = newsTypeMapper.selectAll((String) newsTypeName);
+            PageInfo<NewsType> pageInfo = new PageInfo<>(newsTypeList);
 
-        JSONObject data = new JSONObject();
-        data.put("data", newsTypeList);
-        data.put("pageInfo", pageInfo);
+            JSONObject data = new JSONObject();
+            data.put("data", newsTypeList);
+            data.put("pageInfo", pageInfo);
 
-        return R.isOk().data(data);
+            return R.isOk().data(data);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取新闻分类失败"));
+        }
     }
 }

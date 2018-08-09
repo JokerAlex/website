@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -200,21 +201,28 @@ public class NewsServiceImpl implements ArticleService<News> {
             return R.isFail(new Exception("参数错误"));
         }
 
-        if (pageNum <= 0) {
-            pageNum = 1;
+        try {
+            if (pageNum <= 0) {
+                pageNum = 1;
+            }
+            if (pageSize <= 0) {
+                pageSize = 10;
+            }
+
+            PageHelper.startPage(pageNum, pageSize);
+            List<News> newsList = newsMapper.selectAll((Integer) newsTypeId);
+            //按照时间排序
+            newsList.sort(Comparator.comparing(News::getNewsTime).reversed());
+            PageInfo<News> pageInfo = new PageInfo<>(newsList);
+
+            JSONObject data = new JSONObject();
+            data.put("data", newsList);
+            data.put("pageInfo", pageInfo);
+
+            return R.isOk().data(data);
+        } catch (Exception e) {
+            logger.catching(e);
+            return R.isFail(new Exception("获取新闻失败"));
         }
-        if (pageSize <= 0) {
-            pageSize = 10;
-        }
-
-        PageHelper.startPage(pageNum, pageSize);
-        List<News> newsList = newsMapper.selectAll((Integer) newsTypeId);
-        PageInfo<News> pageInfo = new PageInfo<>(newsList);
-
-        JSONObject data = new JSONObject();
-        data.put("data", newsList);
-        data.put("pageInfo", pageInfo);
-
-        return R.isOk().data(data);
     }
 }
