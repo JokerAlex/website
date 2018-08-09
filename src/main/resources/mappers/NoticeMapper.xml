@@ -32,7 +32,11 @@
     <select id="selectAll" resultMap="allResultMap">
         select notice_id, notice_time, Admin_admin_id
         from Notice
-        order by notice_time
+        <where>
+            <if test="_parameter != null &amp;&amp; !_parameter.trim().equals(&quot;&quot;)">
+                notice_content like CONCAT('%', #{noticeContent}, '%')
+            </if>
+        </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

@@ -37,18 +37,17 @@
     <!--获取所有信息-->
     <select id="selectAll" resultMap="selectAllResultMap">
         select p.professional_id,
-               p.professional_title,
-               p.professional_update_time,
-               p.Admin_admin_id,
-               p.Department_introduction_department_id,
-               d.department_title
-        from Professional_introduction p,
-             Department_introduction d
-        where p.Department_introduction_department_id = d.department_id
-        <set>
-            <if test="departmentId != null">and p.Department_introduction_department_id = #{departmentId} </if>
-        </set>
-        order by p.professional_update_time
+        p.professional_title,
+        p.professional_update_time,
+        p.Admin_admin_id,
+        p.Department_introduction_department_id,
+        d.department_title
+        from Professional_introduction p
+        join Department_introduction d
+        on p.Department_introduction_department_id = d.department_id
+        <if test="_parameter != null">
+            and p.Department_introduction_department_id = #{departmentId}
+        </if>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

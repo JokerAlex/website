@@ -44,15 +44,14 @@
     </select>
 
     <!--获取所有信息-->
-    <select id="selectAll" resultMap="allResultMap">
+    <select id="selectAll" resultMap="allResultMap" parameterType="java.lang.Integer">
         select n.news_id, n.news_title, n.news_time, n.Admin_admin_id, n.News_type_type_id, nt.type_name
-        from News n,
-             News_type nt
-        where n.News_type_type_id = nt.type_id
-        <set>
-            <if test="newsTypeId != null"> and n.News_type_type_id = #{newsTypeId}</if>
-        </set>
-        order by n.news_time
+        from News n
+        join News_type nt
+        on n.News_type_type_id = nt.type_id
+        <if test="_parameter != null">
+            and n.News_type_type_id = #{newsTypeId}
+        </if>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

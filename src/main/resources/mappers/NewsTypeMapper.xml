@@ -22,6 +22,11 @@
         select
         <include refid="Base_Column_List"/>
         from News_type
+        <where>
+            <if test="_parameter != null &amp;&amp; !_parameter.trim().equals(&quot;&quot;)">
+                type_name like CONCAT('%', #{typeName}, '%')
+            </if>
+        </where>
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

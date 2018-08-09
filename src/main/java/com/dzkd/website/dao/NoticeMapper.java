@@ -17,7 +17,7 @@ public interface NoticeMapper {
 
     Notice selectByPrimaryKey(Integer noticeId);
 
-    List<Notice> selectAll();
+    List<Notice> selectAll(String noticeContent);
 
     int updateByPrimaryKeySelective(Notice record);
 

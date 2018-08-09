@@ -32,10 +32,14 @@
     </select>
 
     <!--获取所有信息-->
-    <select id="selectAll" resultMap="allResultMap">
+    <select id="selectAll" resultMap="allResultMap" parameterType="java.lang.String">
         select adm_info_id, adm_info_title, adm_info_time, Admin_admin_id
         from Admission_info
-        order by adm_info_time
+        <where>
+            <if test="_parameter != null &amp;&amp; !_parameter.trim().equals(&quot;&quot;)">
+                adm_info_title like CONCAT('%', #{admissionTitle}, '%')
+            </if>
+        </where>
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

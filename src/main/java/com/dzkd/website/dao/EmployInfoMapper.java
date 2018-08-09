@@ -17,7 +17,7 @@ public interface EmployInfoMapper {
 
     EmployInfo selectByPrimaryKey(Integer empInfoId);
 
-    List<EmployInfo> selectAll();
+    List<EmployInfo> selectAll(String employInfoTitle);
 
     int updateByPrimaryKeySelective(EmployInfo record);
 

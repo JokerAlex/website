@@ -17,7 +17,7 @@ public interface DepartmentIntroductionMapper {
 
     DepartmentIntroduction selectByPrimaryKey(Integer departmentId);
 
-    List<DepartmentIntroduction> selectAll();
+    List<DepartmentIntroduction> selectAll(String departmentTitle);
 
     int updateByPrimaryKeySelective(DepartmentIntroduction record);
 

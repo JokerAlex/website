@@ -1,7 +1,9 @@
 package com.dzkd.website.dao;
 
 import com.dzkd.website.pojo.News;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public interface NewsMapper {
 
     News selectByPrimaryKey(Integer newsId);
 
-    List<News> selectByNewsType(Integer newsTypeId);
+    List<News> selectByNewsType(@Param("newsTypeId") Integer newsTypeId);
 
     List<News> selectAll(Integer newsTypeId);
 

@@ -36,7 +36,11 @@
     <select id="selectAll" resultMap="allResultMap">
         select department_id, department_title, department_update_time, Admin_admin_id
         from Department_introduction
-        order by department_update_time
+        <where>
+            <if test="_parameter != null &amp;&amp; !_parameter.trim().equals(&quot;&quot;)">
+                department_title like CONCAT('%', #{departmentTitle}, '%')
+            </if>
+        </where>
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

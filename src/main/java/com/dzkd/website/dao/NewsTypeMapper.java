@@ -17,7 +17,7 @@ public interface NewsTypeMapper {
 
     NewsType selectByPrimaryKey(Integer typeId);
 
-    List<NewsType> selectAll();
+    List<NewsType> selectAll(String typeName);
 
     int updateByPrimaryKeySelective(NewsType record);
 

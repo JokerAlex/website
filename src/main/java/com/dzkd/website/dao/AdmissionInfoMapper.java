@@ -17,7 +17,7 @@ public interface AdmissionInfoMapper {
 
     AdmissionInfo selectByPrimaryKey(Integer admInfoId);
 
-    List<AdmissionInfo> selectAll();
+    List<AdmissionInfo> selectAll(String admissionTitle);
 
     int updateByPrimaryKeySelective(AdmissionInfo record);
 
