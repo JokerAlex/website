@@ -45,9 +45,8 @@
     </select>
 
     <!--结合userInfo表,学号-->
-    <select id="selectByStuId" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select
-               s.stu_id,
+    <select id="selectByStuId" resultMap="allResultMap" parameterType="java.lang.String">
+        select s.stu_id,
                s.stu_college,
                s.stu_major,
                s.stu_grade,
@@ -59,32 +58,32 @@
                u.email,
                u.user_name,
                u.reg_time
-        from Student s, User_info u
-        where User_user_info_id = user_info_id and stu_id = #{stuId}
+        from Student s
+                 join User_info u on s.User_user_info_id = u.user_info_id
+        where s.stu_id = #{stuId}
     </select>
     <!--结合userInfo表-->
     <select id="selectAll" resultMap="allResultMap">
-        select
-            s.stu_id,
-            s.stu_college,
-            s.stu_major,
-            s.stu_grade,
-            s.User_user_info_id,
-            u.user_info_id,
-            u.real_name,
-            u.address,
-            u.telephone,
-            u.email,
-            u.user_name,
-            u.reg_time
-        from Student s, User_info u
+        select s.stu_id,
+               s.stu_college,
+               s.stu_major,
+               s.stu_grade,
+               s.User_user_info_id,
+               u.user_info_id,
+               u.real_name,
+               u.address,
+               u.telephone,
+               u.email,
+               u.user_name,
+               u.reg_time
+        from Student s,
+             User_info u
         where User_user_info_id = user_info_id
     </select>
 
     <!--结合userInfo表，用户名、密码-->
     <select id="selectByUserNameAndPass" resultMap="allResultMap">
-        select
-               s.stu_id,
+        select s.stu_id,
                s.stu_college,
                s.stu_major,
                s.stu_grade,
@@ -96,13 +95,15 @@
                u.email,
                u.user_name,
                u.reg_time
-        from Student s, User_info u
-        where s.User_user_info_id = u.user_info_id and u.user_name = #{userName} and u.user_password = #{password}
+        from Student s,
+             User_info u
+        where s.User_user_info_id = u.user_info_id
+          and u.user_name = #{userName}
+          and u.user_password = #{password}
     </select>
     <!--结合userInfo表，学号、密码-->
     <select id="selectByStuIdAndPass" resultMap="allResultMap">
-        select
-               s.stu_id,
+        select s.stu_id,
                s.stu_college,
                s.stu_major,
                s.stu_grade,
@@ -114,18 +115,24 @@
                u.email,
                u.user_name,
                u.reg_time
-        from Student s, User_info u
-        where s.User_user_info_id = u.user_info_id and s.stu_id = #{stuId} and u.user_password = #{password}
+        from Student s,
+             User_info u
+        where s.User_user_info_id = u.user_info_id
+          and s.stu_id = #{stuId}
+          and u.user_password = #{password}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-        delete from Student
+        delete
+        from Student
         where stu_id = #{stuId,jdbcType=VARCHAR}
     </delete>
     <insert id="insert" parameterType="com.dzkd.website.pojo.Student">
-        insert into Student (stu_id, stu_college, stu_major,
-                             stu_grade, User_user_info_id)
-        values (#{stuId,jdbcType=VARCHAR}, #{stuCollege,jdbcType=VARCHAR}, #{stuMajor,jdbcType=VARCHAR},
-                #{stuGrade,jdbcType=CHAR}, #{userUserInfoId,jdbcType=INTEGER})
+        insert into Student (stu_id, stu_college, stu_major, stu_grade, User_user_info_id)
+        values (#{stuId,jdbcType=VARCHAR},
+                #{stuCollege,jdbcType=VARCHAR},
+                #{stuMajor,jdbcType=VARCHAR},
+                #{stuGrade,jdbcType=CHAR},
+                #{userUserInfoId,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.dzkd.website.pojo.Student">
         insert into Student
