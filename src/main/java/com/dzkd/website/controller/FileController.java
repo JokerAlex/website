@@ -117,9 +117,16 @@ public class FileController {
     }
 
     @RequestMapping(value = "/admin/showFiles", method = RequestMethod.GET)
-    public R showFiles(int articleCate, int articleId) {
-        List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(articleCate, articleId);
-        return R.isOk().data(fileInfoList);
+    public R showFiles(int type, int articleCate, int articleId) {
+        if (type == 0) {
+            List<FileInfo> fileInfoList = fileInfoMapper.selectByArticle(articleCate, articleId);
+            return R.isOk().data(fileInfoList);
+        } else if (type == 1) {
+            List<Picture> pictureList = pictureMapper.selectByArticle(articleCate, articleId);
+            return R.isOk().data(pictureList);
+        } else {
+            return R.isFail(new Exception("参数错误"));
+        }
     }
 
     @RequestMapping("/download/{fileId}")
