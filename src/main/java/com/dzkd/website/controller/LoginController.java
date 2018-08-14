@@ -24,7 +24,7 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @RequestMapping(name = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public R login(@RequestBody Map<String, String> map, HttpServletRequest request){
 
         R r = loginService.login(map.get("userName"), map.get("password"));
@@ -37,7 +37,7 @@ public class LoginController {
         return r;
     }
 
-    @RequestMapping(name = "/logout", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/logout", method = RequestMethod.DELETE)
     public R logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if (session == null) {
